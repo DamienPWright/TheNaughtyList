@@ -1,0 +1,166 @@
+function TmxLevel(){
+    this._tilemap = 1 
+    this._tileimage = 1
+}
+
+TmxLevel.prototype.preload = function(){ 
+    game.load.tilemap('tilemap', levels[current_level].levelpath, null, Phaser.Tilemap.TILED_JSON);
+    game.load.image('tileset', tilesets[levels[current_level].tileset])
+}
+
+TmxLevel.prototype.create = function(){
+    
+   game.physics.startSystem(Phaser.Physics.ARCADE);
+   game.physics.arcade.gravity.y = 750; 
+   game.stage.backgroundColor = "#000000";
+
+   playerchar = new Player(0,0);
+   player = game.add.existing(playerchar)
+   
+   this.hazards = game.add.group();
+   this.blood = game.add.group();
+   //hazards = this.hazards;
+   
+   if(this._tilemap != null && this._tileimage != null){
+       this.map = game.add.tilemap('tilemap'); 
+       this.map.addTilesetImage( this.map.tilesets[0].name, 'tileset');
+       
+       //layers
+       //this.bkg_layer = this.map.createLayer('bkg');
+       this.wall_layer = this.map.createLayer('wall');
+       
+       //tile collisions
+       this.map.setCollisionByExclusion([-1], true, this.wall_layer);
+       
+       //set world to map size
+       this.wall_layer.resizeWorld();
+       //init pathfinding
+       //pathfindhelper.setMap();
+       this.createObjectsFromMap();
+       console.log("Map Loaded");
+   }else{
+       console.log("Tilemap or tileset image not set");
+   }
+   
+   
+   
+   game.camera.follow(player, Phaser.Camera.FOLLOW_PLATFORMER);
+   tmxtest = this;
+   this.hud = new HUD();
+}
+
+TmxLevel.prototype.update = function(){
+    game.physics.arcade.overlap(player, this.hazards, function(actor, hzd){hzd.onActorContact(actor)});
+    game.physics.arcade.collide(player, this.wall_layer);
+    
+    game.physics.arcade.collide(this.blood, this.wall_layer);
+    
+    this.hud.update();
+}
+
+
+TmxLevel.prototype.createObjectsFromMap = function(){
+    console.log("loading objects?")
+    var objs = this.map.objects.objects;
+    //maptest = this.map;
+    for(var i in objs){
+        console.log(objs[i].name)
+        //console.log(objs[i].x);
+        switch(objs[i].name){
+            case 'player':
+                //player already exists so just set its position
+                player.x = objs[i].x;
+                player.y = objs[i].y - player.height;
+                break;
+            case 'hazard':
+                this.createHazardsFromMap(objs[i])
+                break;
+        }
+    }
+}
+
+TmxLevel.prototype.createEnemiesFromMap = function(en){
+    var newenemy;
+    
+    switch(en.properties.type){
+        //case "spider":
+        //   newenemy = new Spider(en.x, en.y - 32);
+        //    break;
+    }
+    
+    if(newenemy){
+        this.enemies.add(newenemy);
+        if(newenemy.dealsContactDamage){
+            console.log("contact damage enemy created");
+            //this.enemies_contactdamage.add(newenemy);
+        }
+    }else{
+        console.log("Invalid enemy: " + en.properties.type)
+    }
+}
+
+TmxLevel.prototype.createItemsFromMap = function(itm){
+    var newitem;
+    
+    switch(itm.gid){
+    }
+    
+    if(newitem){
+        this.items.add(newitem);
+    }else{
+        console.log("invalid item: " + itm.gid)
+    }
+}
+
+TmxLevel.prototype.createHazardsFromMap = function(hzd){
+    var newhazard;
+    
+    switch(hzd.properties.type){
+        case "spikes":
+            newhazard = new Spikes(hzd.x, hzd.y - 32, hzd.properties.orientation);
+        break;
+    }
+    
+    if(newhazard){
+        this.hazards.add(newhazard);
+    }else{
+        console.log("invalid spikes: " + hzd.gid)
+    }
+}
+
+/**
+ * Use this to create bullets rather than using external code
+ */
+ 
+TmxLevel.prototype.createBullet = function(X, Y, type, friendly, dir){
+    var newbullet;
+    switch(type){
+
+    }
+    if(newbullet){
+        this.bullets.add(newbullet);
+    }
+};
+
+/**
+ * Use this to create effects rather than using external code
+ */
+
+TmxLevel.prototype.createEffect = function(X, Y, type, friendly, dir){
+    var neweffect;
+    switch(type){
+        case "spiderweb":
+            neweffect = new EffSpiderWeb(X, Y);
+            break;
+    }
+    //if(newbullet){
+        this.effects.add(neweffect);
+    //}
+};
+
+TmxLevel.prototype.bloodExplosion = function(X, Y){
+    for(var i = 0; i < 32; i++){
+        var newblood = new Blood(X, Y);
+        this.blood.add(newblood);
+    }
+};

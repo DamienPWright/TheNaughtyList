@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script type="text/javascript" src="js/phaser.min.js"></script>
+        <script type="text/javascript" src="js/game/Globals.js"></script>
+        
+        
+        
+        <script type="text/javascript" src="js/game/HitBox.js"></script>
+        
+        <script type="text/javascript" src="js/game/Blood.js"></script>
+        
+        <script type="text/javascript" src="js/game/Actor.js"></script>
+        <script type="text/javascript" src="js/game/Player.js"></script>
+        <script type="text/javascript" src="js/game/enemies/Enemy.js"></script>
+        
+        <script type="text/javascript" src="js/game/Inventory.js"></script>
+        <script type="text/javascript" src="js/game/items/Item.js"></script>
+        <script type="text/javascript" src="js/game/items/Weapon.js"></script>
+        
+        <script type="text/javascript" src="js/game/hazards/Hazard.js"></script>
+        <script type="text/javascript" src="js/game/hazards/Spikes.js"></script>
+        
+        <script type="text/javascript" src="js/game/fsm.js"></script>
+        <script type="text/javascript" src="js/game/ActorState.js"></script>
+        
+        <script type="text/javascript" src="js/game/gameover.js"></script>
+        <script type="text/javascript" src="js/game/levelclear.js"></script>
+        <script type="text/javascript" src="js/game/TitleScreen.js"></script>
+        
+        <script type="text/javascript" src="js/game/TmxLevel.js"></script>
+        
+        <script type="text/javascript" src="js/game/HUD.js"></script>
+        
+        <style type="text/css">
+            body {
+                margin: 0;
+            }
+        </style>
+    </head>
+    <body>
+        <div>TODO write content</div>
+    </body>
+    <script type="text/javascript">
+        function boot(){
+            game = new Phaser.Game(800,600);
+            game.points = 0;
+            game.state.add("title", TitleScreen);
+            game.state.add("tmxlevel", TmxLevel);
+            //game.state.add('gameover', GameOver);
+            //game.state.add('levelclear', LevelClear);
+            game.state.start('title', TitleScreen);
+        }
+
+        function init(){
+
+        }
+
+        function render(){
+        }
+        
+        window.onload = function (){
+            boot();
+        }
+    </script>
+</html>
