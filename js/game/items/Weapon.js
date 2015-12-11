@@ -13,12 +13,29 @@ function Weapon(key){
     this.attack_cooldown_counter = 0;
     
     this.hitboxFrame = 0;
-    this.hitboxFrames = [];
+    this.hitboxFrames = [
+            {f: 1, hb: 0}
+        ];
     this.hitboxFrameIndex = 0;
-    this.hitboxes = [];
-    this.effectFrames = [];
+    this.hitboxes = [
+        {X: 32, Y: 32, W: 32, H: 32, friendly: true, lifespan: 1}
+    ];
+    
+    this.bulletFrames = [
+        
+    ]
+    this.bulletFrameIndex = 0;
+    this.bullets = {
+        
+    }
+    
+    this.effectFrames = [
+        {f: 0, ef: 0},
+        {f: 1, ef: 1},
+        {f: 2, ef: 0}
+    ];
     this.effectFrameIndex = 0;
-    this.effects = [];
+    this.effects = ["eff1", "eff2", "eff3"];
     
     test = this;
     
@@ -29,50 +46,45 @@ function Weapon(key){
 Weapon.prototype = Object.create(Phaser.Sprite.prototype);
 Weapon.prototype.constructor = Weapon;
 
-/**
- * @abstract - included code is only an example
- */
-
 Weapon.prototype.onAttack = function(){
-    //weapon is now attacking, report attack complete at the appropriate time
     if((!this.is_attacking) && (this.attack_cooldown_counter <= 0)){
         this.is_attacking = true;
         this.animations.play('atk');
         this.attack_counter = this.DEF_ATK_TIME;
         this.attack_cooldown = this.DEF_ATK_COOLDOWN;
     }
-    //console.log('atk');
 }
 
 Weapon.prototype.onEndAttack = function(){
     this.is_attacking = false;
+    this.hitboxFrameIndex = 0;
+    this.effectFrameIndex = 0;
 }
 
-/**
- * @abstract - included code is only an example
- */
 Weapon.prototype.update = function(){
     if(this.is_attacking){
         //countdown
         this.attack_counter -= game.time.physicsElapsedMS;
-
-        console.log(this.attack_counter);
         if(this.animations.currentAnim._frameIndex == this.hitboxFrame){
             //make a hitbox
         }
-        if(this.hitboxFramesIndex < this.hitboxes.length){
-            if(this.animations.currentAnim._frameIndex == this.hitboxFrames[this.hitboxFrameIndex]){
+        if(this.hitboxFrameIndex < this.hitboxes.length){
+            //console.log(' hitbox: ' + this.hitboxFrameIndex + ' frame: ' + this.animations.currentAnim._frameIndex);
+            if(this.animations.currentAnim._frameIndex == this.hitboxFrames[this.hitboxFrameIndex].f){
                 //create hitbox
-                var hbx = this.effects[this.effectFrameIndex];
-                game.states.getCurrentState().createHitBox(hbx);
-                this.effectFrameIndex++;
+                var hbx = this.hitboxes[this.hitboxFrames[this.hitboxFrameIndex].hb];
+                //console.log(hbx);
+                game.state.getCurrentState().createHitBox(this.world.x + hbx.X, this.world.y + hbx.Y, hbx.W, hbx.H, hbx.friendly, hbx.lifespan, false, this);
+                this.hitboxFrameIndex++;
             }
         }
         if(this.effectFrameIndex < this.effects.length){
-            if(this.animations.currentAnim._frameIndex == this.effectFrames[this.effectFrameIndex]){
-                //create effect
-                var eff = this.effects[this.effectFrameIndex];
-                game.states.getCurrentState().createEffect(eff);
+            //console.log(' effect: ' + this.effectFrameIndex + ' frame: ' + this.animations.currentAnim._frameIndex);
+            if(this.animations.currentAnim._frameIndex == this.effectFrames[this.effectFrameIndex].f){
+                //create hitbox
+                var eff = this.effects[this.effectFrames[this.effectFrameIndex].ef];
+                //console.log(eff);
+                //game.states.getCurrentState().createHitBox(hbx);
                 this.effectFrameIndex++;
             }
         }
@@ -85,3 +97,7 @@ Weapon.prototype.update = function(){
         }
     }
 }
+
+Weapon.prototype.onHitActor = function(actor){
+       actor.takeDamage(3, true);
+};

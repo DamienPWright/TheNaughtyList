@@ -13,12 +13,19 @@ TmxLevel.prototype.create = function(){
    game.physics.startSystem(Phaser.Physics.ARCADE);
    game.physics.arcade.gravity.y = 750; 
    game.stage.backgroundColor = "#000000";
+   
+   this.hazards = game.add.group();
+   this.blood = game.add.group();
+   this.enemies = game.add.group();
+   
+   this.hitboxes_seek = game.add.group();
+   this.hitboxes_friendly = game.add.group();
+   this.hitboxes_unfriendly = game.add.group();
 
    playerchar = new Player(0,0);
    player = game.add.existing(playerchar)
    
-   this.hazards = game.add.group();
-   this.blood = game.add.group();
+   
    //hazards = this.hazards;
    
    if(this._tilemap != null && this._tileimage != null){
@@ -51,10 +58,12 @@ TmxLevel.prototype.create = function(){
 
 TmxLevel.prototype.update = function(){
     game.physics.arcade.overlap(player, this.hazards, function(actor, hzd){hzd.onActorContact(actor)});
+    game.physics.arcade.overlap(player, this.enemies, function(actor, enemy){enemy.onPlayerContact(actor)});
     game.physics.arcade.collide(player, this.wall_layer);
+    game.physics.arcade.collide(this.enemies, this.wall_layer);
     
     game.physics.arcade.collide(this.blood, this.wall_layer);
-    
+    game.physics.arcade.overlap(this.hitboxes_friendly, this.enemies, function(hitbox, enemy){test = hitbox; hitbox.onContactWithActor(enemy)})
     this.hud.update();
 }
 
@@ -73,7 +82,10 @@ TmxLevel.prototype.createObjectsFromMap = function(){
                 player.y = objs[i].y - player.height;
                 break;
             case 'hazard':
-                this.createHazardsFromMap(objs[i])
+                this.createHazardsFromMap(objs[i]);
+                break;
+            case 'enemy':
+                this.createEnemiesFromMap(objs[i]);
                 break;
         }
     }
@@ -83,9 +95,9 @@ TmxLevel.prototype.createEnemiesFromMap = function(en){
     var newenemy;
     
     switch(en.properties.type){
-        //case "spider":
-        //   newenemy = new Spider(en.x, en.y - 32);
-        //    break;
+        case "bunny":
+            newenemy = new EnBunny(en.x, en.y - 32);
+            break;
     }
     
     if(newenemy){
@@ -156,6 +168,24 @@ TmxLevel.prototype.createEffect = function(X, Y, type, friendly, dir){
     //if(newbullet){
         this.effects.add(neweffect);
     //}
+};
+
+TmxLevel.prototype.createHitBox = function(X, Y, W, H, friendly, lifespan, seek, origin){
+    var spr = new HitBox(game, X, Y, W, H, 'blanksprite', friendly, lifespan, origin);
+    //spr.body.setSize(W, H, 0, 0);
+    spr.renderable = true;
+    //spr.visible = false;
+    if(seek){
+        this.hitboxes_seek.add(spr);
+        return spr;
+    }
+    if(friendly){
+        this.hitboxes_friendly.add(spr);
+        //console.log("added?")
+    }else{
+        this.hitboxes_unfriendly.add(spr);
+    }
+    return spr;
 };
 
 TmxLevel.prototype.bloodExplosion = function(X, Y){

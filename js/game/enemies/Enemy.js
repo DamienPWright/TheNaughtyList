@@ -1,6 +1,7 @@
 function Enemy(X, Y, key){
     Actor.call(this, X, Y, key);
     this.dealsContactDamage = false;
+    this.contact_damage = 1;
     game.physics.arcade.enable(this);
     //=====
     //States
@@ -31,3 +32,9 @@ Enemy.prototype.checkAttackBox = function (target){
     var detected = false;
     return detected;
 };
+
+Enemy.prototype.onPlayerContact = function (actor){
+    if(this.dealsContactDamage){
+        actor.takeDamage(this.contact_damage, true);
+    }
+}

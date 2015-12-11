@@ -17,6 +17,8 @@ TitleScreen.prototype.preload = function(){
     
     game.load.spritesheet('player', 'assets/img/sprites/player.png', 32, 32);
     
+    game.load.spritesheet('en_bunny', 'assets/img/sprites/ene_bunny.png', 32, 32);
+    
     game.load.spritesheet('hazards', 'assets/img/sprites/hazards.png', 32, 32);
     
     game.load.spritesheet('blood', 'assets/img/sprites/blood.png', 4, 4);

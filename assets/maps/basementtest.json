@@ -254,6 +254,34 @@
                  "width":0,
                  "x":704,
                  "y":448
+                }, 
+                {
+                 "gid":211,
+                 "height":0,
+                 "name":"enemy",
+                 "properties":
+                    {
+                     "type":"bunny"
+                    },
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":448,
+                 "y":640
+                }, 
+                {
+                 "gid":211,
+                 "height":0,
+                 "name":"enemy",
+                 "properties":
+                    {
+                     "type":"bunny"
+                    },
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":384,
+                 "y":384
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -291,6 +319,21 @@
          "imagewidth":320,
          "margin":0,
          "name":"hazards",
+         "properties":
+            {
+
+            },
+         "spacing":0,
+         "tileheight":32,
+         "tilewidth":32
+        }, 
+        {
+         "firstgid":201,
+         "image":"..\/img\/tilesets\/iconlist.png",
+         "imageheight":320,
+         "imagewidth":320,
+         "margin":0,
+         "name":"iconlist",
          "properties":
             {
 

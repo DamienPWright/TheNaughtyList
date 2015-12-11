@@ -1,15 +1,18 @@
-function HitBox(game, X, Y, W, H, key, friendly, lifespan, circle){
+function HitBox(game, X, Y, W, H, key, friendly, lifespan, origin){
     Phaser.Sprite.call(this, game, X, Y, key);
     //this.x = X;
     //this.y = Y;
-     game.physics.arcade.enable(this);
-    this.scale.x = W;
-    this.scale.y = H;
+    this.origin = undefined;
+    game.physics.arcade.enable(this);
+    this.body.allowGravity = false;
+    this.width = W;
+    this.height = H;
     this.friendly = friendly;
     this.lifespan = lifespan;
     //some hitboxes may have circles for more precise collision checking
-    this.circle = circle;
-    
+    if(origin){
+        this.origin = origin;
+    }
     //debug
     this.draw = true;
     
@@ -37,14 +40,25 @@ HitBox.prototype.update = function(){
     //use this for any hitbox unique functionality
 };
 
+/**
+ * 
+ * @param {type} origin - The source of the hitbox. Normally it'll be an attack
+ * @param {type} actor - The target actor it's being applied to.
+ * @desc - if the origin lacks an onHitActor method, this function will do nothing.
+ */
+HitBox.prototype.onContactWithActor = function(actor){
+    if(this.origin){
+        if(this.origin.onHitActor){
+            this.origin.onHitActor(actor);
+        }else{
+            console.log("No method found on this hitboxes' origin.")
+        }
+    }
+}
+
 function getCircle(){
     if(this.hasCircle){
         return this.radius;
     }
     return false;
 }
-//ExtendHitBox.prototype = Object.create(HitBox.prototype);
-//ExtendHitBox.prototype.constructor = ExtendHitBox;
-//console.log("test");    
-//test = new HitBox(50, 50, 50, 50, true, 600);
-//console.log(test);
