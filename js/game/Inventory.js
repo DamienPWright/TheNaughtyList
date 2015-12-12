@@ -15,9 +15,30 @@ Inventory.prototype.getItem = function(){
     
 }
 
-Inventory.prototype.addItemToInventory = function(item){
-    this.items.push(item);
-    item.onAddedToInventory();
+Inventory.prototype.addItemToInventory = function(item, stacks){
+    if(stacks){
+        //find item, then increment its amount
+    }else{
+        this.items.push(item);
+    }
+    
+    item.onAddItemToInventory();
+}
+
+/**
+ * 
+ * @param {type} itemname - string
+ * @returns {undefined}
+ */
+Inventory.prototype.hasItem = function(itemname){
+    var hasitem = false;
+    var result = this.items.filter(function( obj ) {
+           return obj.name == itemname;
+    });
+    if(result.length > 0){
+        hasitem = true;
+    }
+    return hasitem;
 }
 
 Inventory.prototype.addWeapon = function(weapon){
@@ -53,3 +74,11 @@ Inventory.prototype.updateItems = function(actor){
 Inventory.prototype.postUpdate = function(){
     
 };
+
+Inventory.prototype.showInventory = function(){
+    var inv = "";
+    for(var i in this.items){
+        inv = inv + this.items[i].name + ". "
+    }
+    console.log(inv);
+}

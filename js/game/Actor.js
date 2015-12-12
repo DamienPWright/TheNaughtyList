@@ -72,6 +72,13 @@ Actor.prototype.takeDamage = function(damage, blink){
     }
 };
 
+Actor.prototype.heal = function(amount){
+    this.curHP += amount;
+    if(this.curHP > this.maxHP){
+        this.curHP = this.maxHP;
+    }
+}
+
 Actor.prototype.onDeath = function(){
     this.destroy();
 };

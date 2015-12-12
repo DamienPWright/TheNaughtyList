@@ -4,11 +4,24 @@
  * and open the template in the editor.
  */
 
-function Item(){
+function Item(X, Y, iconid){
+    Phaser.Sprite.call(this, game, X, Y, 'items');
+    this.name = "Dammy";
     this.iconid = 0;
+    this.x = X;
+    this.y = Y;
+    if(iconid){
+       this.iconid = iconid 
+    }
     this.buy_value = 0;
     this.sell_value = 0;
+    this.usable = false;
+    this.stacks = false;
+    this.quantity = 0;
 }
+
+Item.prototype = Object.create(Phaser.Sprite.prototype);
+Item.prototype.constructor = Item;
 
 Item.prototype.onAddItemToInventory = function(actor){
     //use to set flags for various things, like allowing the player to dash
@@ -21,3 +34,11 @@ Item.prototype.update = function(actor){
 Item.prototype.onRemoveItemFromInventory = function(actor){
  
 };
+
+Item.prototype.onUse = function(actor){
+    
+}
+
+Item.prototype.onPickUp = function(actor){
+    
+}
