@@ -25,6 +25,7 @@ Item.prototype.constructor = Item;
 
 Item.prototype.onAddItemToInventory = function(actor){
     //use to set flags for various things, like allowing the player to dash
+    console.log("item " + this.name + " was added");
 };
 
 Item.prototype.update = function(actor){
@@ -32,7 +33,7 @@ Item.prototype.update = function(actor){
 };
 
 Item.prototype.onRemoveItemFromInventory = function(actor){
- 
+    console.log("item " + this.name + " was removed");
 };
 
 Item.prototype.onUse = function(actor){
