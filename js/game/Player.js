@@ -10,6 +10,7 @@ function Player(X, Y){
     this.movespeed_mod = 1.0;
     
     this.body.setSize(32, 32, 0, 0);
+    this.anchor.setTo(0.5, 0);
     
     this.dir = 0; // 0 for left, 1 for right, 1.5 is up, 0.5 is down.
     this.abs_velocity = 0;
@@ -80,13 +81,15 @@ function Player(X, Y){
     this.playerToMousepointerDir = 0;
  
     //hitbox - what is this meant for anyway? Maybe remove it.
-    this.hitbox = new HitBox(game,0,0,32,32);
+    this.hitbox = new HitBox(game,0,16,10,16,"idk");
+    this.hitbox.anchor.setTo(0.5,0);
     this.addChild(this.hitbox);
+    hbx = this.hitbox;
     
     
     //weapons and inventory
     this.inventory = new Inventory(this);
-    this.inventory.addWeapon(new Weapon());
+    this.inventory.addWeapon(new Weapon('wood_sword', this));
     
     //=====
     //States
@@ -225,6 +228,11 @@ Player.prototype.manageCooldowns = function(){
 }
 
 Player.prototype.updateAnimation = function(){
+    if(this.dir === 1){
+        this.scale.setTo(-1,1);
+    }else{
+        this.scale.setTo(1,1);
+    }
     var anim = 'idle_right';
     //if (this.body.onFloor())
     if(this.body.blocked.down){
@@ -264,7 +272,7 @@ Player.prototype.processControls = function(){
 	   this.abs_velocity = this.abs_maxvelocity;
 	}
 	this.dir_angle = this.dir * Math.PI;
-    this.body.velocity.x = this.abs_velocity * Math.cos(this.dir_angle) * this.movespeed_mod;
+        this.body.velocity.x = this.abs_velocity * Math.cos(this.dir_angle) * this.movespeed_mod;
     //this.body.velocity.y = this.abs_velocity * Math.sin(this.dir_angle) * this.movespeed_mod;
     }else{
         if(this.abs_velocity > 0){                                                                                                                                                                          

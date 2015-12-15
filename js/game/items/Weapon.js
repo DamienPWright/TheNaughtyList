@@ -4,8 +4,14 @@
  * @returns {Weapon}
  * @property {Array} hitboxFrames - define them in order of occurance.
  */
-function Weapon(key){
+function Weapon(key, actor){
     Phaser.Sprite.call(this, game, 0, 0, 'wood_sword')
+    if(actor){
+        this.actor = actor
+    }else{
+        console.log("No actor supplied to weapon!");
+    }
+    this.anchor.setTo(0.5,0);
     this.is_attacking = false;
     this.DEF_ATK_TIME = 450;
     this.attack_counter = 0;
@@ -18,7 +24,7 @@ function Weapon(key){
         ];
     this.hitboxFrameIndex = 0;
     this.hitboxes = [
-        {X: 32, Y: 32, W: 32, H: 32, friendly: true, lifespan: 1}
+        {X: 0, Y: 32, W: 32, H: 32, friendly: true, lifespan: 1}
     ];
     
     this.bulletFrames = [
@@ -37,7 +43,7 @@ function Weapon(key){
     this.effectFrameIndex = 0;
     this.effects = ["eff1", "eff2", "eff3"];
     
-    test = this;
+    this.x = 16;
     
     this.animations.add('atk', [0, 1, 2], 20, false);
     this.animations.add('idle', [2], 20, false);
@@ -73,8 +79,13 @@ Weapon.prototype.update = function(){
             if(this.animations.currentAnim._frameIndex == this.hitboxFrames[this.hitboxFrameIndex].f){
                 //create hitbox
                 var hbx = this.hitboxes[this.hitboxFrames[this.hitboxFrameIndex].hb];
+                var xpos = hbx.X;
                 //console.log(hbx);
-                game.state.getCurrentState().createHitBox(this.world.x + hbx.X, this.world.y + hbx.Y, hbx.W, hbx.H, hbx.friendly, hbx.lifespan, false, this);
+                if(this.actor.dir === 1){
+                    xpos = -xpos + this.actor.width;
+                }
+                game.state.getCurrentState().createHitBox(this.world.x + xpos, this.world.y + hbx.Y, hbx.W, hbx.H, hbx.friendly, hbx.lifespan, false, this);
+                console.log( this.world.x + " " + xpos);
                 this.hitboxFrameIndex++;
             }
         }

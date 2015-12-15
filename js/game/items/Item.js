@@ -6,6 +6,8 @@
 
 function Item(X, Y, iconid){
     Phaser.Sprite.call(this, game, X, Y, 'items');
+    game.physics.arcade.enable(this);
+    this.body.allowGravity = false;
     this.name = "Dammy";
     this.iconid = 0;
     this.x = X;
@@ -18,6 +20,7 @@ function Item(X, Y, iconid){
     this.usable = false;
     this.stacks = false;
     this.quantity = 0;
+    this.frame = this.iconid;
 }
 
 Item.prototype = Object.create(Phaser.Sprite.prototype);

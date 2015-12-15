@@ -2,6 +2,7 @@ function Enemy(X, Y, key){
     Actor.call(this, X, Y, key);
     this.dealsContactDamage = false;
     this.contact_damage = 1;
+    this.blinkTimer = 6;
     game.physics.arcade.enable(this);
     //=====
     //States

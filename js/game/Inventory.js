@@ -28,6 +28,8 @@ Inventory.prototype.addItemToInventory = function(item){
     }else{
         this.items.push(item);
     }
+    item.x = 0;
+    item.y = -9000;
     item.onAddItemToInventory(this.player);
 }
 
@@ -94,7 +96,6 @@ Inventory.prototype.addWeapon = function(weapon){
     this.weapons.push(weapon);
     if(!this.activeweapon){
         this.equipWeapon(this.weapons.length - 1);
-        
     }
 }
 

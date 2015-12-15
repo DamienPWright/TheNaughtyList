@@ -24,6 +24,7 @@ TitleScreen.prototype.preload = function(){
     game.load.spritesheet('blood', 'assets/img/sprites/blood.png', 4, 4);
     
     game.load.spritesheet('ui_items', 'assets/img/ui/hud_elements.png', 32, 32);
+    game.load.spritesheet('items', 'assets/img/tilesets/itemiconlist.png', 32, 32);
     
     game.load.spritesheet('wood_sword', 'assets/img/sprites/woodsword_swipe.png', 64, 64);
 }

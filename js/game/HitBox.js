@@ -14,13 +14,13 @@ function HitBox(game, X, Y, W, H, key, friendly, lifespan, origin){
         this.origin = origin;
     }
     //debug
-    this.draw = true;
+    this.draw = false;
     
     if(this.draw){
         var g = game.add.graphics(this.x, this.y);
         // draw a rectangle
         g.beginFill(0x0000FF, 0.4);
-        g.drawRect(this.x, this.y, 1, 1);
+        g.drawRect(this.x, this.y, this.width , this.height);
         g.endFill();
         if(this.circle){
             g.beginFill(0xff0000, 0.3);

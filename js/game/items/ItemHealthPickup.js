@@ -5,11 +5,12 @@
  */
 
 
-function ItemHealthPickup(){
-    Item.call(this, 0, 0);
+function ItemHealthPickup(X, Y){
+    Item.call(this, X, Y);
     this.name = "Heart";
     this.stacks = true;
     this.hp_recovery = 2;
+    this.iconid = 0;
 }
 
 ItemHealthPickup.prototype = Object.create(Item.prototype);
