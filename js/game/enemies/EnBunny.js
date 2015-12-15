@@ -6,8 +6,8 @@
 
 function EnBunny(X, Y){
     Enemy.call(this, X, Y, "en_bunny");
-    this.maxHP = 9;
-    this.curHP = 9;
+    this.maxHP = 2;
+    this.curHP = 2;
     this.contact_damage = 1;
     
     this.body.collideWorldBounds = true;

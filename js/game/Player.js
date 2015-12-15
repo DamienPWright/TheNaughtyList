@@ -70,7 +70,8 @@ function Player(X, Y){
     
     this.attackTimer;
     
-    game.input.keyboard.addKey(32).onDown.add(function(){this.jump()}, this);
+    game.input.keyboard.addKey(32).onDown.add(function(){this.jumpKey = true}, this);
+    game.input.keyboard.addKey(32).onUp.add(function(){this.jumpKey = false}, this);
     
     //control setup - may migrate this to its own thing
     this.Wkey = game.input.keyboard.addKey(87);
@@ -78,6 +79,7 @@ function Player(X, Y){
     this.Skey = game.input.keyboard.addKey(83);
     this.Dkey = game.input.keyboard.addKey(68);
     this.DashKey = game.input.keyboard.addKey(16);
+    this.JumpKey = false;
     
     game.input.mouse.mouseDownCallback = this.onMouseDown;
     game.input.mouse.mouseUpCallback = this.onMouseUp;
@@ -321,6 +323,10 @@ Player.prototype.processControls = function(){
     }
     if(this.Dkey.isDown && this.body.velocity.x < 0){
         this.body.velocity.x += this.accel_rate * 2;
+    }
+    
+    if(this.jumpKey){
+        this.jump();
     }
 }
 

@@ -118,12 +118,12 @@ Inventory.prototype.equipWeapon = function(index){
     }
 }
 
-Inventory.prototype.updateItems = function(actor){
+Inventory.prototype.updateItems = function(){
     for(var i in this.items){
-        this.items[i].update(actor);
+        this.items[i].update(this.player);
     }
     for(var i in this.weapons){
-        this.weapons[i].update();
+        this.weapons[i].update(this.player);
     }
 }
 
