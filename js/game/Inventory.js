@@ -41,14 +41,20 @@ Inventory.prototype.removeItemByName = function(itemname){
     var itmindex = this.getIndexOfItem(itemname);
     
     if(itmindex != -1){
-        this.items[itmindex].onRemoveItemFromInventory(this.player);
         if(this.items[itmindex].stacks){
+            this.items[itmindex].onRemoveItemFromInventory(this.player);
             if(this.items[itmindex].quantity > 1){
                 this.items[itmindex].quantity -= 1;
             }else{
                 this.items.splice(itmindex, 1);
             }
         }else{
+            //look for other instances of the item first. If it's the last one, run the remove code.
+            var numitems = this.items.filter(function( obj ) {return obj.name == itemname;}).length;
+            console.log(numitems);
+            if(numitems <= 1){
+                this.items[itmindex].onRemoveItemFromInventory(this.player);
+            }
             this.items.splice(itmindex, 1);
         }
         

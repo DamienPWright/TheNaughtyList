@@ -13,6 +13,7 @@ function Player(X, Y){
     this.anchor.setTo(0.5, 0);
     
     this.dir = 0; // 0 for left, 1 for right, 1.5 is up, 0.5 is down.
+    this.attackdir = 0;
     this.abs_velocity = 0;
     this.DEF_MAXVELOCITY = 250;
     this.abs_maxvelocity = this.DEF_MAXVELOCITY;
@@ -24,9 +25,12 @@ function Player(X, Y){
     this.decel_rate = 100;
     this.ground_decel_rate = 100;
     this.air_decel_rate = 10;
-    this.jump_speed = 650;
-    this.body.gravity.y = 1000;
-    this.body.maxVelocity.y = 650;
+    this.DEF_JUMP_SPEED = 650;
+    this.jump_speed = this.DEF_JUMP_SPEED;
+    this.DEF_GRAV_Y = 1000;
+    this.DEF_GRAV_MAX_Y = 650;
+    this.body.gravity.y = this.DEF_GRAV_Y;
+    this.body.maxVelocity.y = this.DEF_GRAV_MAX_Y;
     //lifestats
     this.hp = 0;
     this.maxhp = 0;
@@ -59,6 +63,9 @@ function Player(X, Y){
     this.DEF_ATK_COMBO_MAX = 3;
     this.attack_combo_max = this.DEF_ATK_COMBO_MAX;
     
+    this.jump_counter = 0;
+    this.max_jumps = 1;
+    
     this.gamestate = game.state.getCurrentState();
     
     this.attackTimer;
@@ -79,6 +86,7 @@ function Player(X, Y){
     this.mouseLeft = false;
     this.mouseRight = false;
     this.playerToMousepointerDir = 0;
+    this.playerToMouseDir = 0;
  
     //hitbox - what is this meant for anyway? Maybe remove it.
     this.hitbox = new HitBox(game,0,16,10,16,"idk");
@@ -253,6 +261,7 @@ Player.prototype.processControls = function(){
     if(this.body.blocked.down){
         this.decel_rate = this.ground_decel_rate;
         this.accel_rate = this.accel_rate_ground;
+        this.jump_counter = 0;
     }else{
         this.decel_rate = this.air_decel_rate;
         this.accel_rate = this.accel_rate_air;
@@ -316,10 +325,12 @@ Player.prototype.processControls = function(){
 }
 
 Player.prototype.jump = function(){
-    if(this.body.blocked.down)
+    if(this.body.blocked.down || (this.jump_counter < this.max_jumps))
         //if (this.body.onFloor())
         {
             this.body.velocity.y = -this.jump_speed;
+            this.jump_counter++;
+            console.log(this.jump_counter + ' ' + this.max_jumps);
         }
 };
 
@@ -418,7 +429,7 @@ Player.prototype.calculatePlayerToPointerAngle = function(){
         adir = 1.75;
     }
     
-    this.playerAnimDir = adir;
+    this.playerToMouseDir = adir;
 }
 
 function testWeaponAnim(start, tween){
