@@ -62,7 +62,8 @@ function Player(X, Y){
     this.attack_combo = 0;
     this.DEF_ATK_COMBO_MAX = 3;
     this.attack_combo_max = this.DEF_ATK_COMBO_MAX;
-    
+
+    this.jump_held = false;
     this.jump_counter = 0;
     this.max_jumps = 1;
     
@@ -70,8 +71,8 @@ function Player(X, Y){
     
     this.attackTimer;
     
-    game.input.keyboard.addKey(32).onDown.add(function(){this.jumpKey = true}, this);
-    game.input.keyboard.addKey(32).onUp.add(function(){this.jumpKey = false}, this);
+    game.input.keyboard.addKey(32).onDown.add(function(){this.jumpKey = true; this.jump_held = true;}, this);
+    game.input.keyboard.addKey(32).onUp.add(function(){this.jumpKey = false; this.jump_held = false;}, this);
     
     //control setup - may migrate this to its own thing
     this.Wkey = game.input.keyboard.addKey(87);
@@ -325,19 +326,27 @@ Player.prototype.processControls = function(){
         this.body.velocity.x += this.accel_rate * 2;
     }
     
+    //While this seems to work I think it looks horrible. May want to re-think this.
     if(this.jumpKey){
         this.jump();
+    }else if(!this.body.blocked.down && !this.falling && !this.jumpKey){
+        //this is to prevent a jump after walking off a ledge. Any bonus jumps should still fire
+        this.falling = true;
+        this.jump_counter++;
+    }else if(this.body.blocked.down){
+        this.falling = false;
     }
+    
 }
 
 Player.prototype.jump = function(){
-    if(this.body.blocked.down || (this.jump_counter < this.max_jumps))
-        //if (this.body.onFloor())
-        {
-            this.body.velocity.y = -this.jump_speed;
-            this.jump_counter++;
-            console.log(this.jump_counter + ' ' + this.max_jumps);
-        }
+    if(this.body.blocked.down || (this.jump_counter < this.max_jumps)){
+        this.jumpKey = false; //prevents doublejumps being counted instantly plus prevents a held jump key from "bouncing". 
+        this.falling = true; //prevents a jump from being prematurely counted for double-jumping
+        this.body.velocity.y = -this.jump_speed;
+        this.jump_counter++;
+        //console.log(this.jump_counter + ' ' + this.max_jumps);
+    }
 };
 
 
