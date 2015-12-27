@@ -21,7 +21,8 @@ function EnBunny(X, Y){
     this.DEF_GRAV_MAX_Y = 650;
     this.body.gravity.y = this.DEF_GRAV_Y;
     this.body.maxVelocity.y = this.DEF_GRAV_MAX_Y;
-        
+    this.body.maxVelocity.x = this.DEF_MAXVELOCITY;
+    
     this.detector_platform_left;
     this.detector_platform_right;
 

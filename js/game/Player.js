@@ -17,6 +17,9 @@ function Player(X, Y){
     this.abs_velocity = 0;
     this.DEF_MAXVELOCITY = 250;
     this.abs_maxvelocity = this.DEF_MAXVELOCITY;
+    this.base_acceleration = this.DEF_MAXVELOCITY * 3;
+    this.air_acceleration = this.DEF_MAXCELOCITY;
+    this.cur_acceleration = this.base_acceleration;
     
     this.accel_rate = 50;
     this.accel_rate_ground = 50;
@@ -31,6 +34,7 @@ function Player(X, Y){
     this.DEF_GRAV_MAX_Y = 650;
     this.body.gravity.y = this.DEF_GRAV_Y;
     this.body.maxVelocity.y = this.DEF_GRAV_MAX_Y;
+    this.body.maxVelocity.x = this.abs_maxvelocity;
     //lifestats
     this.hp = 0;
     this.maxhp = 0;
@@ -265,12 +269,10 @@ Player.prototype.processControls = function(){
     
     //accelleration stuff
     if(this.body.blocked.down){
-        this.decel_rate = this.ground_decel_rate;
-        this.accel_rate = this.accel_rate_ground;
+        this.cur_acceleration = this.base_acceleration;
         this.jump_counter = 0;
     }else{
-        this.decel_rate = this.air_decel_rate;
-        this.accel_rate = this.accel_rate_air;
+        this.cur_acceleration = this.air_acceleration;
     }    
     
     if(!this.movedir_lock){
@@ -281,38 +283,24 @@ Player.prototype.processControls = function(){
     	}
     }
     
-    if(this.Akey.isDown || this.Dkey.isDown){
-        this.abs_velocity += this.accel_rate;
-	if(this.abs_velocity > this.abs_maxvelocity){
-	   this.abs_velocity = this.abs_maxvelocity;
-	}
-	this.dir_angle = this.dir * Math.PI;
-        this.body.velocity.x = this.abs_velocity * Math.cos(this.dir_angle) * this.movespeed_mod;
-    //this.body.velocity.y = this.abs_velocity * Math.sin(this.dir_angle) * this.movespeed_mod;
+     if(this.Akey.isDown){
+         if(this.body.velocity.x > 0){
+            this.body.acceleration.x = -this.base_acceleration * 3;
+         }else{
+            this.body.acceleration.x = -this.base_acceleration;
+         }
+     }else if(this.Dkey.isDown){
+         if(this.body.velocity.x < 0){
+            this.body.acceleration.x = this.base_acceleration * 3;
+         }else{
+            this.body.acceleration.x = this.base_acceleration;
+         }
+     }
+         
+    if(!this.Akey.isDown && !this.Dkey.isDown && this.body.blocked.down){
+        this.body.drag.x = this.cur_acceleration * 8;
     }else{
-        if(this.abs_velocity > 0){                                                                                                                                                                          
-            this.abs_velocity -= this.decel_rate;
-            if(this.abs_velocity < this.decel_rate){
-                this.abs_velocity = 0;
-            }
-        }
-    }
-	
-    if(this.Akey.isDown || this.Dkey.isDown){
-        //this.body.drag.x = 0;
-    }else{
-        //this.body.drag.x = 1600;
-        if(this.body.velocity.x > 0){
-            this.body.velocity.x -= this.decel_rate;
-        }
-        if(this.body.velocity.x < 0){
-            this.body.velocity.x += this.decel_rate;
-        }
-	    
-        //make sure resting speed is 0
-        if(this.body.velocity.x > -this.decel_rate && this.body.velocity.x < this.decel_rate){
-            this.body.velocity.x = 0;
-        }
+        this.body.drag.x = 0;
     }
 	
     if(this.Skey.isDown || this.Wkey.isDown){
@@ -322,13 +310,6 @@ Player.prototype.processControls = function(){
         //this.body.drag.y = 1600;
     }
 	
-    if(this.Akey.isDown && this.body.velocity.x > 0){
-        this.body.velocity.x += -this.accel_rate * 2;
-    }
-    if(this.Dkey.isDown && this.body.velocity.x < 0){
-        this.body.velocity.x += this.accel_rate * 2;
-    }
-    
     //While this seems to work I think it looks horrible. May want to re-think this.
     if(this.jumpKey){
         this.jump();
@@ -369,24 +350,6 @@ Player.prototype.attack = function(evt){
             game.state.getCurrentState().createBullet(this.x, this.y, "spider", true, DIR_SOUTH);
             break;
     }
-    /*
-     //create hitbox depending on facing.
-     var hbx;
-     var hby;
-     var stabeffect;
-     if(this.dir == 0){
-         hbx = this.x - this.attackBox.w;
-         stabeffect = new Stab(player.x - player.width, player.y + (player.height / 2), this.dir);
-     }else{
-         hbx = this.x + this.width;
-         stabeffect = new Stab(player.x + player.width, player.y + (player.height / 2), this.dir);
-     }
-     if(stabeffect){
-         game.add.existing(stabeffect);
-     }
-     hby = this.y + (this.height / 2) - this.attackBox.h / 2;
-     this.gamestate.createHitBox(hbx, hby, this.attackBox.w, this.attackBox.h, true, 50);
-     */
 }
 
 Player.prototype.onDeath = function(){
