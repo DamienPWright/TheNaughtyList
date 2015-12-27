@@ -31,7 +31,7 @@ ItemJetPack.prototype.update = function(actor){
     }else{
         actor.body.gravity.y = actor.DEF_GRAV_Y;
         actor.body.allowGravity = true;
-        actor.body.maxVelocity.y = actor.DEF_GRAV_MAX_Y;
+        if(!actor.inventory.hasItem("Reindeer Dust")){actor.body.maxVelocity.y = actor.DEF_GRAV_MAX_Y};
     }
     if(actor.body.blocked.down){
         this.fuel = this.maxFuel;

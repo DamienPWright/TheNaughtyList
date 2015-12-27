@@ -97,6 +97,8 @@ function Player(X, Y){
     this.addChild(this.hitbox);
     hbx = this.hitbox;
     
+    this.detector_platform_left;
+    this.detector_platform_right;
     
     //weapons and inventory
     this.inventory = new Inventory(this);
@@ -220,6 +222,7 @@ Player.prototype.update = function(){
     //this.calculatePlayerToPointerAngle();
     
     this.inventory.updateItems();
+
 };
 
 Player.prototype.manageCooldowns = function(){

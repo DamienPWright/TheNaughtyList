@@ -91,17 +91,17 @@ Actor.prototype.checkSeekBox = function(posKey, target, seekbox, width, height){
     var detected = false;
     //console.log(width + " " + height);
     switch(posKey){
-        case DIR_EAST:
-            seekbox.width = height;
-            seekbox.height = width;
-            seekbox.x = this.body.x + this.body.width;
-            seekbox.y = this.body.y - (seekbox.body.height / 2) + (this.body.height / 2);
-            break;
-        case DIR_WEST:
+        case 0:
             seekbox.width = height;
             seekbox.height = width;
             seekbox.x = this.body.x - seekbox.body.width;
-            seekbox.y = this.body.y - (seekbox.body.height / 2) + (this.body.height / 2);
+            seekbox.y = this.body.y - (seekbox.height / 2) + (this.body.height/2);
+            break;
+        case 1:
+            seekbox.width = height;
+            seekbox.height = width;
+            seekbox.x = this.body.x + this.body.width;
+            seekbox.y = this.body.y - (seekbox.height / 2) + (this.body.height/2);
             break;
         case 'centered':
             seekbox.x = this.x + (this.width / 2) + (seekbox.body.width / 2);

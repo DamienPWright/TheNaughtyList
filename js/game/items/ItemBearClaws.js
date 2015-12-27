@@ -20,13 +20,16 @@ ItemBearClaws.prototype.onAddItemToInventory = function(actor){
 };
 
 ItemBearClaws.prototype.update = function(actor){
-    if(actor.body.velocity.y > 0){
+    if(actor.body.velocity.y > 0 && !actor.jump_held){
         if((actor.Akey.isDown && actor.body.blocked.left) || (actor.Dkey.isDown && actor.body.blocked.right)){
             actor.body.maxVelocity.y = 20;
-            actor.jump_counter = 1;
+            actor.jump_counter = 0;
+            if(actor.jump_held){actor.jump()};
         }else{
             actor.body.maxVelocity.y = actor.DEF_GRAV_MAX_Y
         }
+    }else{
+        actor.body.maxVelocity.y = actor.DEF_GRAV_MAX_Y
     }
 };
 

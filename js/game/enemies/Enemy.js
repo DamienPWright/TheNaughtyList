@@ -4,6 +4,12 @@ function Enemy(X, Y, key){
     this.contact_damage = 1;
     this.blinkTimer = 6;
     game.physics.arcade.enable(this);
+    this.seekboxes = [
+        
+    ];
+    this.detectors = [
+        
+    ]
     //=====
     //States
     //=====
@@ -27,6 +33,7 @@ Enemy.prototype.update = function(){
     this.updateActor();
     this.fsm.update();
     this.updateAnimation();
+    this.updateDetectors();
 };
 
 Enemy.prototype.checkAttackBox = function (target){
@@ -38,4 +45,8 @@ Enemy.prototype.onPlayerContact = function (actor){
     if(this.dealsContactDamage){
         actor.takeDamage(this.contact_damage, true);
     }
+}
+
+Enemy.prototype.updateDetectors = function (){
+    
 }

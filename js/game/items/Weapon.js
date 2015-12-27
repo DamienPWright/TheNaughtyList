@@ -24,7 +24,7 @@ function Weapon(key, actor){
         ];
     this.hitboxFrameIndex = 0;
     this.hitboxes = [
-        {X: 0, Y: 32, W: 32, H: 32, friendly: true, lifespan: 1}
+        {X: 0, Y: -20, W: 64, H: 58, friendly: true, lifespan: 50}
     ];
     
     this.bulletFrames = [
@@ -80,11 +80,12 @@ Weapon.prototype.update = function(){
                 //create hitbox
                 var hbx = this.hitboxes[this.hitboxFrames[this.hitboxFrameIndex].hb];
                 var xpos = hbx.X;
+                var hbxW = hbx.W;
                 //console.log(hbx);
                 if(this.actor.dir === 1){
-                    xpos = -xpos + this.actor.width;
+                    xpos = -(xpos) - hbxW;
                 }
-                game.state.getCurrentState().createHitBox(this.world.x + xpos, this.world.y + hbx.Y, hbx.W, hbx.H, hbx.friendly, hbx.lifespan, false, this);
+                game.state.getCurrentState().createHitBox(this.actor.x + xpos, this.actor.y + hbx.Y, hbxW, hbx.H, hbx.friendly, hbx.lifespan, false, this);
                 console.log( this.world.x + " " + xpos);
                 this.hitboxFrameIndex++;
             }
