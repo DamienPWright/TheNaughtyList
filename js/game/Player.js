@@ -141,19 +141,19 @@ function Player(X, Y){
     this.state_Dash.name = "Dash";
     this.state_Dash.onEnter = function(){
         this.actor.movedir_lock = true;
-        this.actor.abs_maxvelocity = this.actor.dash_velocity;
-        this.actor.dir_angle = this.actor.dir * Math.PI;
-        this.actor.abs_velocity = this.actor.abs_maxvelocity;
-        this.actor.body.velocity.x = this.actor.dash_velocity * Math.cos(this.actor.dir_angle) * this.actor.movespeed_mod;
+        this.actor.body.maxVelocity.x = this.actor.dash_velocity;
+        //this.actor.dir_angle = this.actor.dir * Math.PI;
+        //this.actor.abs_velocity = this.actor.abs_maxvelocity;
+        this.actor.body.velocity.x = (this.actor.dir == 1) ? -this.actor.dash_velocity: this.actor.dash_velocity;
         //this.actor.body.velocity.y = this.actor.dash_velocity * Math.sin(this.actor.dir_angle) * this.actor.movespeed_mod;
     };
     this.state_Dash.onExit = function(){
        this.actor.dash_time_count = 0;
        this.actor.movedir_lock = false;
-       this.actor.abs_maxvelocity = this.actor.DEF_MAXVELOCITY;
-       this.actor.dash_cooldown_count = this.actor.dash_cooldown;
-       this.actor.abs_velocity = 0;
-       this.actor.body.velocity.x = 0;
+       this.actor.body.maxVelocity.x = this.actor.DEF_MAXVELOCITY;
+       //this.actor.dash_cooldown_count = this.actor.dash_cooldown;
+       //this.actor.abs_velocity = 0;
+       //this.actor.body.velocity.x = 0;
        //this.actor.body.velocity.y = 0;
     };
     this.state_Dash.update = function(){
