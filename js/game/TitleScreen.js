@@ -21,6 +21,8 @@ TitleScreen.prototype.preload = function(){
     
     game.load.spritesheet('hazards', 'assets/img/sprites/hazards.png', 32, 32);
     
+    game.load.spritesheet('platformA', 'assets/img/sprites/platformA.png', 96, 32);
+    
     game.load.spritesheet('blood', 'assets/img/sprites/blood.png', 4, 4);
     
     game.load.spritesheet('ui_items', 'assets/img/ui/hud_elements.png', 32, 32);

@@ -18,6 +18,7 @@ TmxLevel.prototype.create = function(){
    this.blood = game.add.group();
    this.enemies = game.add.group();
    this.items = game.add.group();
+   this.platforms = game.add.group();
    
    this.hitboxes_seek = game.add.group();
    this.hitboxes_friendly = game.add.group();
@@ -58,10 +59,11 @@ TmxLevel.prototype.create = function(){
 }
 
 TmxLevel.prototype.update = function(){
-    game.physics.arcade.overlap(player, this.hazards, function(actor, hzd){hzd.onActorContact(actor)});
+    game.physics.arcade.overlap(player, this.hazards, function(actor, hzd){if(actor.hitbox.overlap(hzd)){hzd.onActorContact(actor)}});
     game.physics.arcade.overlap(player, this.enemies, function(actor, enemy){if(actor.hitbox.overlap(enemy)){enemy.onPlayerContact(actor)}});
     game.physics.arcade.overlap(player, this.items, function(actor, item){player.inventory.addItemToInventory(item)});
     game.physics.arcade.collide(player, this.wall_layer);
+    game.physics.arcade.collide(player, this.platforms);
     game.physics.arcade.collide(this.enemies, this.wall_layer);
     
     game.physics.arcade.collide(this.blood, this.wall_layer);
@@ -88,6 +90,9 @@ TmxLevel.prototype.createObjectsFromMap = function(){
                 break;
             case 'enemy':
                 this.createEnemiesFromMap(objs[i]);
+                break;
+            case 'platform':
+                this.createPlatformsFromMap(objs[i]);
                 break;
             case 'item':
                 this.createItemsFromMap(objs[i]);
@@ -144,7 +149,23 @@ TmxLevel.prototype.createHazardsFromMap = function(hzd){
     if(newhazard){
         this.hazards.add(newhazard);
     }else{
-        console.log("invalid spikes: " + hzd.gid)
+        console.log("invalid hazard: " + hzd.gid)
+    }
+}
+
+TmxLevel.prototype.createPlatformsFromMap = function(plt){
+    var newplatform;
+    
+    switch(plt.properties.type){
+        case "moving":
+            newplatform = new MovingPlatform(plt.x, plt.y - 32, plt.properties.direction, plt.properties.dt_switch, plt.properties.dt_amount);
+        break;
+    }
+    
+    if(newplatform){
+        this.platforms.add(newplatform);
+    }else{
+        console.log("invalid platform " + plt.gid)
     }
 }
 

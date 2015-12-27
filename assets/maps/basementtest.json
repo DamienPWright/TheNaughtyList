@@ -296,6 +296,23 @@
                  "width":0,
                  "x":608,
                  "y":704
+                }, 
+                {
+                 "gid":402,
+                 "height":0,
+                 "name":"platform",
+                 "properties":
+                    {
+                     "direction":"0",
+                     "dt_amount":"256",
+                     "dt_switch":"false",
+                     "type":"moving"
+                    },
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":224,
+                 "y":608
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -363,6 +380,21 @@
          "imagewidth":320,
          "margin":0,
          "name":"itemiconlist",
+         "properties":
+            {
+
+            },
+         "spacing":0,
+         "tileheight":32,
+         "tilewidth":32
+        }, 
+        {
+         "firstgid":401,
+         "image":"..\/img\/sprites\/platformA.png",
+         "imageheight":320,
+         "imagewidth":320,
+         "margin":0,
+         "name":"platforms",
          "properties":
             {
 

@@ -25,6 +25,8 @@ function Player(X, Y){
     this.accel_rate_ground = 50;
     this.accel_rate_air = 15;
     
+    this.onground = false
+    
     this.decel_rate = 100;
     this.ground_decel_rate = 100;
     this.air_decel_rate = 10;
@@ -96,7 +98,7 @@ function Player(X, Y){
     this.playerToMouseDir = 0;
  
     //hitbox - what is this meant for anyway? Maybe remove it.
-    this.hitbox = new HitBox(game,0,16,10,16,"idk");
+    this.hitbox = new HitBox(game,0,14,10,16,"idk");
     this.hitbox.anchor.setTo(0.5,0);
     this.addChild(this.hitbox);
     hbx = this.hitbox;
@@ -268,7 +270,7 @@ Player.prototype.processControls = function(){
     this.body.acceleration.y = 0;
     
     //accelleration stuff
-    if(this.body.blocked.down){
+    if(this.onground){
         this.cur_acceleration = this.base_acceleration;
         this.jump_counter = 0;
     }else{
@@ -297,7 +299,7 @@ Player.prototype.processControls = function(){
          }
      }
          
-    if(!this.Akey.isDown && !this.Dkey.isDown && this.body.blocked.down){
+    if(!this.Akey.isDown && !this.Dkey.isDown && this.onground){
         this.body.drag.x = this.cur_acceleration * 8;
     }else{
         this.body.drag.x = 0;
@@ -313,14 +315,19 @@ Player.prototype.processControls = function(){
     //While this seems to work I think it looks horrible. May want to re-think this.
     if(this.jumpKey){
         this.jump();
-    }else if(!this.body.blocked.down && !this.falling && !this.jumpKey){
+    }else if(!this.onground && !this.falling && !this.jumpKey){
         //this is to prevent a jump after walking off a ledge. Any bonus jumps should still fire
         this.falling = true;
         this.jump_counter++;
-    }else if(this.body.blocked.down){
+    }else if(this.onground){
         this.falling = false;
     }
     
+    if(this.body.blocked.down || this.body.touching.down){
+        this.onground = true;
+    }else{
+        this.onground = false;
+    }
 }
 
 Player.prototype.jump = function(){

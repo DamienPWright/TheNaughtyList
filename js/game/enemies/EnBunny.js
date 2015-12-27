@@ -167,10 +167,12 @@ function EnBunny(X, Y){
     this.state_leapAttack.onEnter = function(){
        this.actor.attacking_count = this.actor.ATTACKING_TIME;
        this.actor.abs_maxvelocity = this.actor.persue_speed;
+       this.actor.body.maxVelocity.x = this.actor.persue_speed;
     };
     
     this.state_leapAttack.onExit = function(){
         this.actor.abs_maxvelocity = this.actor.DEF_MAXVELOCITY;
+        this.actor.body.maxVelocity.x = this.actor.DEF_MAXVELOCITY;
         
     };
     this.state_leapAttack.update = function(){
