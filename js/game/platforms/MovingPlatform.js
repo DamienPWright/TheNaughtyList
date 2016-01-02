@@ -96,5 +96,5 @@ MovingPlatform.prototype.update = function(){
             this.body.acceleration.x = accel;
             break;
     }
-    console.log(this.body.friction);
+    //console.log(this.body.friction);
 }

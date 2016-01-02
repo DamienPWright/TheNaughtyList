@@ -17,6 +17,8 @@ TitleScreen.prototype.preload = function(){
     
     game.load.spritesheet('player', 'assets/img/sprites/player.png', 32, 32);
     
+    game.load.spritesheet('NPCs', 'assets/img/sprites/NPC.png', 32, 64);
+    
     game.load.spritesheet('en_bunny', 'assets/img/sprites/ene_bunny.png', 32, 32);
     
     game.load.spritesheet('hazards', 'assets/img/sprites/hazards.png', 32, 32);
@@ -27,13 +29,18 @@ TitleScreen.prototype.preload = function(){
     
     game.load.spritesheet('ui_items', 'assets/img/ui/hud_elements.png', 32, 32);
     game.load.spritesheet('items', 'assets/img/tilesets/itemiconlist.png', 32, 32);
+    game.load.image('dialogue_box', 'assets/img/ui/textbox.png')
     
     game.load.spritesheet('wood_sword', 'assets/img/sprites/woodsword_swipe.png', 64, 64);
+    
+    game.load.json('dialogues', 'js/game/data/Dialogues.json');
 }
 
 TitleScreen.prototype.create = function(){
      init();
     scoreText = game.add.text(16, 16, '', {fontSize: '32px', fill: '#FFF'});
+    dialogues = game.cache.getJSON('dialogues');
+    
     this.selector = game.add.sprite(0,0,'title_select');
     this.selector.canMove = true;
     this.cursors = game.input.keyboard.createCursorKeys();

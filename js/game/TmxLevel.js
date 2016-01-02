@@ -19,6 +19,7 @@ TmxLevel.prototype.create = function(){
    this.enemies = game.add.group();
    this.items = game.add.group();
    this.platforms = game.add.group();
+   this.npcs = game.add.group();
    
    this.hitboxes_seek = game.add.group();
    this.hitboxes_friendly = game.add.group();
@@ -47,6 +48,9 @@ TmxLevel.prototype.create = function(){
        //pathfindhelper.setMap();
        this.createObjectsFromMap();
        console.log("Map Loaded");
+       console.log(levels[current_level].levelpath);
+       console.log(tilesets[levels[current_level].tileset]);
+       
    }else{
        console.log("Tilemap or tileset image not set");
    }
@@ -56,6 +60,8 @@ TmxLevel.prototype.create = function(){
    game.camera.follow(player, Phaser.Camera.FOLLOW_PLATFORMER);
    tmxtest = this;
    this.hud = new HUD();
+   this.dialoguebox = new DialogueDisplay();
+   game.add.existing(this.dialoguebox);
 }
 
 TmxLevel.prototype.update = function(){
@@ -96,6 +102,9 @@ TmxLevel.prototype.createObjectsFromMap = function(){
                 break;
             case 'item':
                 this.createItemsFromMap(objs[i]);
+                break;
+            case "npc":
+                this.createNPCsFromMap(objs[i]);
                 break;
         }
     }
@@ -166,6 +175,22 @@ TmxLevel.prototype.createPlatformsFromMap = function(plt){
         this.platforms.add(newplatform);
     }else{
         console.log("invalid platform " + plt.gid)
+    }
+}
+
+TmxLevel.prototype.createNPCsFromMap = function(npc){
+    var newnpc;
+    
+    switch(npc.properties.type){
+        case "violet":
+            newnpc = new NPC(npc.x, npc.y - 32);
+        break;
+    }
+    
+    if(newnpc){
+        this.npcs.add(newnpc);
+    }else{
+        console.log("invalid npc " + npc.gid)
     }
 }
 

@@ -189,12 +189,12 @@ function EnBunny(X, Y){
         var pitdetector = false;
         
         if(this.actor.dir == 0){
-            this.actor.body.velocity.x = -this.actor.abs_maxvelocity;
+            this.actor.body.acceleration.x = -this.actor.abs_maxvelocity * 4;
             if(!this.actor.detector_platform_left){
                 pitdetector = true;
             }
         }else{
-            this.actor.body.velocity.x = this.actor.abs_maxvelocity;
+            this.actor.body.acceleration.x = this.actor.abs_maxvelocity * 4;
             if(!this.actor.detector_platform_right){
                 pitdetector = true;
             }

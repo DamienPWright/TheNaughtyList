@@ -18,7 +18,7 @@ function Player(X, Y){
     this.DEF_MAXVELOCITY = 250;
     this.abs_maxvelocity = this.DEF_MAXVELOCITY;
     this.base_acceleration = this.DEF_MAXVELOCITY * 3;
-    this.air_acceleration = this.DEF_MAXCELOCITY;
+    this.air_acceleration = this.DEF_MAXVELOCITY;
     this.cur_acceleration = this.base_acceleration;
     
     this.accel_rate = 50;
@@ -26,6 +26,7 @@ function Player(X, Y){
     this.accel_rate_air = 15;
     
     this.onground = false
+    this.controls_locked = false;
     
     this.decel_rate = 100;
     this.ground_decel_rate = 100;
@@ -77,16 +78,19 @@ function Player(X, Y){
     
     this.attackTimer;
     
-    game.input.keyboard.addKey(32).onDown.add(function(){this.jumpKey = true; this.jump_held = true;}, this);
-    game.input.keyboard.addKey(32).onUp.add(function(){this.jumpKey = false; this.jump_held = false;}, this);
+    game.input.keyboard.addKey(32).onDown.add(function(){if(!this.controls_locked){this.jumpKey = true; this.jump_held = true};}, this);
+    game.input.keyboard.addKey(32).onUp.add(function(){if(!this.controls_locked){this.jumpKey = false; this.jump_held = false};}, this);
     
     //control setup - may migrate this to its own thing
     this.Wkey = game.input.keyboard.addKey(87);
     this.Akey = game.input.keyboard.addKey(65);
     this.Skey = game.input.keyboard.addKey(83);
     this.Dkey = game.input.keyboard.addKey(68);
+    Ekey = game.input.keyboard.addKey(69);
+    SpaceKey = game.input.keyboard.addKey(32);
     this.DashKey = game.input.keyboard.addKey(16);
     this.JumpKey = false;
+    
     
     game.input.mouse.mouseDownCallback = this.onMouseDown;
     game.input.mouse.mouseUpCallback = this.onMouseUp;
@@ -268,65 +272,72 @@ Player.prototype.updateAnimation = function(){
 Player.prototype.processControls = function(){
     this.body.acceleration.x = 0;
     this.body.acceleration.y = 0;
-    
-    //accelleration stuff
-    if(this.onground){
-        this.cur_acceleration = this.base_acceleration;
-        this.jump_counter = 0;
-    }else{
-        this.cur_acceleration = this.air_acceleration;
-    }    
-    
-    if(!this.movedir_lock){
-        if(this.Akey.isDown) {
-    		this.dir = 1;
-    	}else if (this.Dkey.isDown) {
-    		this.dir = 0;
-    	}
-    }
-    
-     if(this.Akey.isDown){
-         if(this.body.velocity.x > 0){
-            this.body.acceleration.x = -this.base_acceleration * 3;
-         }else{
-            this.body.acceleration.x = -this.base_acceleration;
+    if(!this.controls_locked){
+        //accelleration stuff
+        if(this.onground){
+            this.cur_acceleration = this.base_acceleration;
+            this.jump_counter = 0;
+        }else{
+            this.cur_acceleration = this.air_acceleration;
+        }    
+
+        if(!this.movedir_lock){
+            if(this.Akey.isDown) {
+                    this.dir = 1;
+            }else if (this.Dkey.isDown) {
+                    this.dir = 0;
+            }
+        }
+
+         if(this.Akey.isDown){
+             if(this.body.velocity.x > 0){
+                this.body.acceleration.x = -this.base_acceleration * 3;
+             }else{
+                this.body.acceleration.x = -this.base_acceleration;
+             }
+         }else if(this.Dkey.isDown){
+             if(this.body.velocity.x < 0){
+                this.body.acceleration.x = this.base_acceleration * 3;
+             }else{
+                this.body.acceleration.x = this.base_acceleration;
+             }
          }
-     }else if(this.Dkey.isDown){
-         if(this.body.velocity.x < 0){
-            this.body.acceleration.x = this.base_acceleration * 3;
-         }else{
-            this.body.acceleration.x = this.base_acceleration;
-         }
-     }
-         
-    if(!this.Akey.isDown && !this.Dkey.isDown && this.onground){
-        this.body.drag.x = this.cur_acceleration * 8;
+
+        if(!this.Akey.isDown && !this.Dkey.isDown){
+            if(this.onground){
+                this.body.drag.x = this.cur_acceleration * 8;
+            }else{
+                this.body.drag.x = this.cur_acceleration * 2;
+            }
+        }else{
+            this.body.drag.x = 0;
+        }
+
+        if(this.Skey.isDown || this.Wkey.isDown){
+
+            //this.body.drag.y = 0;
+        }else{
+            //this.body.drag.y = 1600;
+        }
+
+        //While this seems to work I think it looks horrible. May want to re-think this.
+        if(this.jumpKey){
+            this.jump();
+        }else if(!this.onground && !this.falling && !this.jumpKey){
+            //this is to prevent a jump after walking off a ledge. Any bonus jumps should still fire
+            this.falling = true;
+            this.jump_counter++;
+        }else if(this.onground){
+            this.falling = false;
+        }
+
+        if(this.body.blocked.down || this.body.touching.down){
+            this.onground = true;
+        }else{
+            this.onground = false;
+        }
     }else{
-        this.body.drag.x = 0;
-    }
-	
-    if(this.Skey.isDown || this.Wkey.isDown){
-    
-        //this.body.drag.y = 0;
-    }else{
-        //this.body.drag.y = 1600;
-    }
-	
-    //While this seems to work I think it looks horrible. May want to re-think this.
-    if(this.jumpKey){
-        this.jump();
-    }else if(!this.onground && !this.falling && !this.jumpKey){
-        //this is to prevent a jump after walking off a ledge. Any bonus jumps should still fire
-        this.falling = true;
-        this.jump_counter++;
-    }else if(this.onground){
-        this.falling = false;
-    }
-    
-    if(this.body.blocked.down || this.body.touching.down){
-        this.onground = true;
-    }else{
-        this.onground = false;
+        this.body.velocity.x = 0;
     }
 }
 

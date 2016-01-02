@@ -1,0 +1,23 @@
+{
+    "test_text_001": [
+        {
+            "id": "test_text_001",
+            "lines": [
+                "Hello, how are you?",
+                "I am good, thanks for asking!"
+            ],
+            "avatar":"null"
+        }
+    ],
+    "test_text_002": [
+        {
+            "id": "test_text_001",
+            "lines": [
+                "Hello, how are you?",
+                "Granted, you do not actually have the ability to respond",
+                "But I am asking anyway, because I am nice."
+            ],
+            "avatar":"null"
+        }
+    ]
+}
