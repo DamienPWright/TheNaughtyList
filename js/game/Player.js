@@ -292,13 +292,13 @@ Player.prototype.processControls = function(){
             }
         }
 
-         if(this.Akey.isDown && !this.knocked_back){
+         if(this.Akey.isDown && !this.movement_input_locked){
              if(this.body.velocity.x > 0){
                 this.body.acceleration.x = -this.base_acceleration * 3;
              }else{
                 this.body.acceleration.x = -this.base_acceleration;
              }
-         }else if(this.Dkey.isDown && !this.knocked_back){
+         }else if(this.Dkey.isDown && !this.movement_input_locked){
              if(this.body.velocity.x < 0){
                 this.body.acceleration.x = this.base_acceleration * 3;
              }else{
@@ -308,13 +308,13 @@ Player.prototype.processControls = function(){
 
         if(!this.Akey.isDown && !this.Dkey.isDown){
             if(this.onground){
-                if(this.knocked_back){
+                if(this.weaken_soft_velocity_limiter){
                    this.body.drag.x = this.cur_acceleration / 2; 
                 }else{
                    this.body.drag.x = this.cur_acceleration * 8;
                 }
             }else{
-                if(this.knocked_back){
+                if(this.weaken_soft_velocity_limiter){
                     this.body.drag.x = this.cur_acceleration / 8;
                 }else{
                     this.body.drag.x = this.cur_acceleration * 2;
@@ -332,7 +332,7 @@ Player.prototype.processControls = function(){
         }
 
         //While this seems to work I think it looks horrible. May want to re-think this.
-        if(this.jumpKey){
+        if(this.jumpKey && !this.movement_input_locked){
             this.jump();
         }else if(!this.onground && !this.falling && !this.jumpKey){
             //this is to prevent a jump after walking off a ledge. Any bonus jumps should still fire
@@ -348,13 +348,13 @@ Player.prototype.processControls = function(){
             this.onground = false;
         }
     }else{
-        //this.body.velocity.x = 0;
+        this.body.velocity.x = 0;
     }
     
     if((this.body.velocity.x < -this.soft_maxvelocity.x) || (this.body.velocity.x > this.soft_maxvelocity.x)){
         console.log("over tha limit!")
         this.body.acceleration.x = 0;
-        if(this.knocked_back){
+        if(this.weaken_soft_velocity_limiter){
             this.body.drag.x = this.cur_acceleration / 8;
         }else{
             this.body.drag.x = this.base_acceleration * 3;           
@@ -362,7 +362,7 @@ Player.prototype.processControls = function(){
     }
     
     if((this.body.velocity.y < -this.soft_maxvelocity.y) || (this.body.velocity.y < -this.soft_maxvelocity.y)){
-        if(this.knocked_back){
+        if(this.weaken_soft_velocity_limiter){
             this.body.drag.y = this.cur_acceleration / 8;
         }else{
             this.body.drag.y = this.base_acceleration * 3;           

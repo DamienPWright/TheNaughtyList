@@ -19,11 +19,12 @@ function Actor(X, Y, key, HP){
     this.knocked_back = true;
     this.knocked_back_timer = 0;
     
-    this.spring_vert_lock = false;
-    this.spring_horiz_lock = false;
+    this.spring_lock = false;
     this.spring_velocity_on = false;
     this.spring_lock_timer = 0;
     this.spring_velocity_timer = 0;
+    
+    this.weaken_soft_velocity_limiter = false; //use this to reduce soft velocity cap's influence on current velocity, allows for dashing etc.
     
     this.movement_input_locked = false; // Use controls_locked for cutscene stuff, this is more for reaction to crowd control skills
     this.attack_input_locked = false; //Use this to prevent new attacks from being made?
@@ -56,13 +57,32 @@ Actor.prototype.updateActor = function(){
     if(this.blinking){
         this.blink();
     }
+    
     if(this.knocked_back){
         this.knocked_back_timer -= game.time.physicsElapsedMS;
         if(this.knocked_back_timer <= 0){
             this.knocked_back = false;
         }
-    };
+   };
    
+   if(this.spring_velocity_on){
+       this.spring_velocity_timer -= game.time.physicsElapsedMS;
+       if(this.spring_velocity_timer <= 0){
+           this.spring_velocity_on = false;
+       }
+   }
+   
+   if(this.knocked_back || this.spring_velocity_on){
+       this.weaken_soft_velocity_limiter = true;
+   }else{
+       this.weaken_soft_velocity_limiter = false;
+   }
+   
+   if(this.knocked_back){
+       this.movement_input_locked = true;
+   }else{
+       this.movement_input_locked = false;
+   }
     this.updateStatusEffects();
 };
 
@@ -223,4 +243,22 @@ Actor.prototype.knockback = function(XSPD, YSPD, dur){
     this.body.velocity.x = XSPD;
     this.body.velocity.y = YSPD;
     this.knocked_back_timer = dur;
+}
+
+Actor.prototype.spring = function(XSPD, YSPD){
+    var cxvel = this.body.velocity.x;
+    var cyvel = this.body.velocity.y;
+    
+    this.body.velocity.x = XSPD;
+    this.body.velocity.y = YSPD;
+    
+    if(!XSPD || XSPD === 0){
+        this.body.velocity.x = cxvel;  
+    }
+    if(!YSPD || YSPD === 0){
+        this.body.velocity.y = cyvel;
+    }
+    var timer = (Math.abs(XSPD) > Math.abs(YSPD)) ? Math.abs(XSPD) : Math.abs(YSPD); 
+    this.spring_velocity_timer = timer * 0.8;
+    this.spring_velocity_on = true;
 }
