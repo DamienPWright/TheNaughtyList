@@ -16,7 +16,10 @@ function Player(X, Y){
     this.attackdir = 0;
     this.abs_velocity = 0;
     this.DEF_MAXVELOCITY = 250;
-    this.abs_maxvelocity = this.DEF_MAXVELOCITY;
+    this.DEF_HARD_MAXVELOCITY = new Phaser.Point(1000,1000);
+    this.DEF_SOFT_MAXVELOCITY = new Phaser.Point(250, 800);
+    this.soft_maxvelocity = new Phaser.Point(this.DEF_SOFT_MAXVELOCITY.x, this.DEF_SOFT_MAXVELOCITY.y);
+    this.abs_maxvelocity = this.DEF_HARD_MAXVELOCITY.x;
     this.base_acceleration = this.DEF_MAXVELOCITY * 3;
     this.air_acceleration = this.DEF_MAXVELOCITY;
     this.cur_acceleration = this.base_acceleration;
@@ -36,8 +39,8 @@ function Player(X, Y){
     this.DEF_GRAV_Y = 1000;
     this.DEF_GRAV_MAX_Y = 650;
     this.body.gravity.y = this.DEF_GRAV_Y;
-    this.body.maxVelocity.y = this.DEF_GRAV_MAX_Y;
-    this.body.maxVelocity.x = this.abs_maxvelocity;
+    this.body.maxVelocity.y = this.DEF_HARD_MAXVELOCITY.y;
+    this.body.maxVelocity.x = this.DEF_HARD_MAXVELOCITY.x;
     //lifestats
     this.hp = 0;
     this.maxhp = 0;
@@ -147,7 +150,7 @@ function Player(X, Y){
     this.state_Dash.name = "Dash";
     this.state_Dash.onEnter = function(){
         this.actor.movedir_lock = true;
-        this.actor.body.maxVelocity.x = this.actor.dash_velocity;
+        //this.actor.body.maxVelocity.x = this.actor.dash_velocity;
         //this.actor.dir_angle = this.actor.dir * Math.PI;
         //this.actor.abs_velocity = this.actor.abs_maxvelocity;
         this.actor.body.velocity.x = (this.actor.dir == 1) ? -this.actor.dash_velocity: this.actor.dash_velocity;
@@ -156,7 +159,7 @@ function Player(X, Y){
     this.state_Dash.onExit = function(){
        this.actor.dash_time_count = 0;
        this.actor.movedir_lock = false;
-       this.actor.body.maxVelocity.x = this.actor.DEF_MAXVELOCITY;
+       //this.actor.body.maxVelocity.x = this.actor.DEF_MAXVELOCITY;
        //this.actor.dash_cooldown_count = this.actor.dash_cooldown;
        //this.actor.abs_velocity = 0;
        //this.actor.body.velocity.x = 0;
@@ -289,13 +292,13 @@ Player.prototype.processControls = function(){
             }
         }
 
-         if(this.Akey.isDown){
+         if(this.Akey.isDown && !this.knocked_back){
              if(this.body.velocity.x > 0){
                 this.body.acceleration.x = -this.base_acceleration * 3;
              }else{
                 this.body.acceleration.x = -this.base_acceleration;
              }
-         }else if(this.Dkey.isDown){
+         }else if(this.Dkey.isDown && !this.knocked_back){
              if(this.body.velocity.x < 0){
                 this.body.acceleration.x = this.base_acceleration * 3;
              }else{
@@ -305,9 +308,17 @@ Player.prototype.processControls = function(){
 
         if(!this.Akey.isDown && !this.Dkey.isDown){
             if(this.onground){
-                this.body.drag.x = this.cur_acceleration * 8;
+                if(this.knocked_back){
+                   this.body.drag.x = this.cur_acceleration / 2; 
+                }else{
+                   this.body.drag.x = this.cur_acceleration * 8;
+                }
             }else{
-                this.body.drag.x = this.cur_acceleration * 2;
+                if(this.knocked_back){
+                    this.body.drag.x = this.cur_acceleration / 8;
+                }else{
+                    this.body.drag.x = this.cur_acceleration * 2;
+                }
             }
         }else{
             this.body.drag.x = 0;
@@ -337,7 +348,27 @@ Player.prototype.processControls = function(){
             this.onground = false;
         }
     }else{
-        this.body.velocity.x = 0;
+        //this.body.velocity.x = 0;
+    }
+    
+    if((this.body.velocity.x < -this.soft_maxvelocity.x) || (this.body.velocity.x > this.soft_maxvelocity.x)){
+        console.log("over tha limit!")
+        this.body.acceleration.x = 0;
+        if(this.knocked_back){
+            this.body.drag.x = this.cur_acceleration / 8;
+        }else{
+            this.body.drag.x = this.base_acceleration * 3;           
+        }
+    }
+    
+    if((this.body.velocity.y < -this.soft_maxvelocity.y) || (this.body.velocity.y < -this.soft_maxvelocity.y)){
+        if(this.knocked_back){
+            this.body.drag.y = this.cur_acceleration / 8;
+        }else{
+            this.body.drag.y = this.base_acceleration * 3;           
+        }
+    }else{
+        this.body.drag.y = 0;
     }
 }
 
