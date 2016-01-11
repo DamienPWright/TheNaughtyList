@@ -1,7 +1,6 @@
 {
     "test_text_001": [
         {
-            "id": "test_text_001",
             "lines": [
                 "Hello, how are you?",
                 "I am good, thanks for asking!"
@@ -11,11 +10,29 @@
     ],
     "test_text_002": [
         {
-            "id": "test_text_001",
             "lines": [
                 "Hello, how are you?",
                 "Granted, you do not actually have the ability to respond",
                 "But I am asking anyway, because I am nice."
+            ],
+            "avatar":"null"
+        }
+    ],
+    "test_text_003": [
+        {
+            "lines": [
+                "Up ahead are some warps that will take you to test areas",
+                "Use them to practise agaisnt various things, though beware",
+                "that the test areas are just as dangerous as the exam itself"
+            ],
+            "avatar":"null"
+        }
+    ],
+    "test_text_004": [
+        {
+            "lines": [
+                "We mostly use these for trying new ideas out, really",
+                "Just walk up to one and press E to enter it."
             ],
             "avatar":"null"
         }

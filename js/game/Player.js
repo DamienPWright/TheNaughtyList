@@ -140,7 +140,11 @@ function Player(X, Y){
         */
         if(this.actor.mouseLeft && this.actor.attack_cooldown_count <= 0){
             testweapon = this.actor.inventory.activeweapon
-            this.actor.inventory.activeweapon.onAttack();
+            this.actor.inventory.activeweapon.onAttack(true);
+        }
+        
+        if(this.actor.mouseRight && this.actor.attack_cooldown_count <= 0){
+            this.actor.inventory.activeweapon.onAttack(false);
         }
         
     };
@@ -235,7 +239,7 @@ Player.prototype.update = function(){
     //this.calculatePlayerToPointerAngle();
     
     this.inventory.updateItems();
-
+    //console.log(this.body.acceleration.x)
 };
 
 Player.prototype.manageCooldowns = function(){
@@ -370,6 +374,9 @@ Player.prototype.processControls = function(){
     }else{
         this.body.drag.y = 0;
     }
+
+    
+    
 }
 
 Player.prototype.jump = function(){

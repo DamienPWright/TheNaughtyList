@@ -20,6 +20,7 @@ TmxLevel.prototype.create = function(){
    this.items = game.add.group();
    this.platforms = game.add.group();
    this.npcs = game.add.group();
+   this.levelobjects = game.add.group();
    
    this.hitboxes_seek = game.add.group();
    this.hitboxes_friendly = game.add.group();
@@ -68,8 +69,11 @@ TmxLevel.prototype.update = function(){
     game.physics.arcade.overlap(player, this.hazards, function(actor, hzd){if(actor.hitbox.overlap(hzd)){hzd.onActorContact(actor)}});
     game.physics.arcade.overlap(player, this.enemies, function(actor, enemy){if(actor.hitbox.overlap(enemy)){enemy.onPlayerContact(actor)}});
     game.physics.arcade.overlap(player, this.items, function(actor, item){player.inventory.addItemToInventory(item)});
-    game.physics.arcade.collide(player, this.wall_layer);
+    game.physics.arcade.overlap(player, this.levelobjects, function(actor, lvlobj){dbgtest = lvlobj;lvlobj.onOverlap(actor)});
+
     game.physics.arcade.collide(player, this.platforms);
+    
+    game.physics.arcade.collide(player, this.wall_layer);
     game.physics.arcade.collide(this.enemies, this.wall_layer);
     
     game.physics.arcade.collide(this.blood, this.wall_layer);
@@ -105,6 +109,9 @@ TmxLevel.prototype.createObjectsFromMap = function(){
                 break;
             case "npc":
                 this.createNPCsFromMap(objs[i]);
+                break;
+            case "levelobject":
+                this.createLevelObjectsFromMap(objs[i]);
                 break;
         }
     }
@@ -193,6 +200,46 @@ TmxLevel.prototype.createNPCsFromMap = function(npc){
         console.log("invalid npc " + npc.gid)
     }
 }
+
+
+TmxLevel.prototype.createLevelObjectsFromMap = function(lvlobj){
+    var newlvlobj;
+    
+    switch(lvlobj.properties.id){
+        //consider creating a JSON file to hold this data in.
+        case "spring_01_u":
+            newlvlobj = new Spring(lvlobj.x, lvlobj.y - 32, 1.5, 950, 10);
+            break;
+        case "spring_01_r":
+            newlvlobj = new Spring(lvlobj.x, lvlobj.y - 32, 0, 950, 11);
+            break;
+        case "spring_01_d":
+            newlvlobj = new Spring(lvlobj.x, lvlobj.y - 32, 0.5, 950, 13);
+            break;
+        case "spring_01_l":
+            newlvlobj = new Spring(lvlobj.x, lvlobj.y - 32, 1, 950, 12);
+            break;
+        case "spring_01_ur":
+            newlvlobj = new Spring(lvlobj.x, lvlobj.y - 32, 1.75, 950, 20);
+            break;
+        case "spring_01_dr":
+            newlvlobj = new Spring(lvlobj.x, lvlobj.y - 32, 0.25, 950, 22);
+            break;
+        case "spring_01_dl":
+            newlvlobj = new Spring(lvlobj.x, lvlobj.y - 32, 0.75, 950, 23);
+            break;
+        case "spring_01_ul":
+            newlvlobj = new Spring(lvlobj.x, lvlobj.y - 32, 1.25, 950, 21);
+            break;
+    }
+    
+    if(newlvlobj){
+        this.levelobjects.add(newlvlobj);
+    }else{
+        console.log("invalid levelobject " + lvlobj.gid)
+    }
+}
+
 
 /**
  * Use this to create bullets rather than using external code

@@ -13,101 +13,42 @@ function Weapon(key, actor){
     }
     this.anchor.setTo(0.5,0);
     this.is_attacking = false;
-    this.DEF_ATK_TIME = 450;
-    this.attack_counter = 0;
-    this.DEF_ATK_COOLDOWN = 0;
-    this.attack_cooldown_counter = 0;
     
-    this.hitboxFrame = 0;
-    this.hitboxFrames = [
-            {f: 1, hb: 0}
-        ];
-    this.hitboxFrameIndex = 0;
-    this.hitboxes = [
-        {X: 0, Y: -20, W: 64, H: 58, friendly: true, lifespan: 50}
-    ];
+    this.left_attack = new SwordAttack(this, this.actor);
+    this.right_attack = new SwordSpecial(this, this.actor);
     
-    this.bulletFrames = [
-        
-    ]
-    this.bulletFrameIndex = 0;
-    this.bullets = {
-        
-    }
+    this.animations.add('idle', [2], 20, false);
     
-    this.effectFrames = [
-        {f: 0, ef: 0},
-        {f: 1, ef: 1},
-        {f: 2, ef: 0}
-    ];
-    this.effectFrameIndex = 0;
-    this.effects = ["eff1", "eff2", "eff3"];
+    this.animations.play('idle');
     
     this.x = 16;
-    
-    this.animations.add('atk', [0, 1, 2], 20, false);
-    this.animations.add('idle', [2], 20, false);
 }
 
 Weapon.prototype = Object.create(Phaser.Sprite.prototype);
 Weapon.prototype.constructor = Weapon;
 
-Weapon.prototype.onAttack = function(){
-    if((!this.is_attacking) && (this.attack_cooldown_counter <= 0)){
-        this.is_attacking = true;
-        this.animations.play('atk');
-        this.attack_counter = this.DEF_ATK_TIME;
-        this.attack_cooldown = this.DEF_ATK_COOLDOWN;
+Weapon.prototype.onAttack = function(left){
+    if(!this.is_attacking){
+        if(left){
+            this.left_attack.onAttack();
+        }else{
+            this.right_attack.onAttack();
+        }
     }
 }
 
 Weapon.prototype.onEndAttack = function(){
-    this.is_attacking = false;
-    this.hitboxFrameIndex = 0;
-    this.effectFrameIndex = 0;
+    this.animations.play('idle');
 }
 
 Weapon.prototype.update = function(){
-    if(this.is_attacking){
-        //countdown
-        this.attack_counter -= game.time.physicsElapsedMS;
-        if(this.animations.currentAnim._frameIndex == this.hitboxFrame){
-            //make a hitbox
-        }
-        if(this.hitboxFrameIndex < this.hitboxes.length){
-            //console.log(' hitbox: ' + this.hitboxFrameIndex + ' frame: ' + this.animations.currentAnim._frameIndex);
-            if(this.animations.currentAnim._frameIndex == this.hitboxFrames[this.hitboxFrameIndex].f){
-                //create hitbox
-                var hbx = this.hitboxes[this.hitboxFrames[this.hitboxFrameIndex].hb];
-                var xpos = hbx.X;
-                var hbxW = hbx.W;
-                //console.log(hbx);
-                if(this.actor.dir === 1){
-                    xpos = -(xpos) - hbxW;
-                }
-                game.state.getCurrentState().createHitBox(this.actor.x + xpos, this.actor.y + hbx.Y, hbxW, hbx.H, hbx.friendly, hbx.lifespan, false, this);
-                console.log( this.world.x + " " + xpos);
-                this.hitboxFrameIndex++;
-            }
-        }
-        if(this.effectFrameIndex < this.effects.length){
-            //console.log(' effect: ' + this.effectFrameIndex + ' frame: ' + this.animations.currentAnim._frameIndex);
-            if(this.animations.currentAnim._frameIndex == this.effectFrames[this.effectFrameIndex].f){
-                //create hitbox
-                var eff = this.effects[this.effectFrames[this.effectFrameIndex].ef];
-                //console.log(eff);
-                //game.states.getCurrentState().createHitBox(hbx);
-                this.effectFrameIndex++;
-            }
-        }
-        if(this.attack_counter <= 0){
-            this.onEndAttack();
-        }
+    if(this.left_attack.is_attacking || this.right_attack.is_attacking){
+        this.is_attacking = true;
     }else{
-        if(this.attack_cooldown_counter > 0){
-            this.attack_cooldown_counter -= game.time.physicsElapsedMS;
-        }
+        this.is_attacking = false;
     }
+    this.left_attack.update();
+    this.right_attack.update();
 }
 
 Weapon.prototype.onHitActor = function(actor){

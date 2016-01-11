@@ -10,7 +10,8 @@ DIR_NORTH = 3;
 current_level = 0;
 levels = [
     {levelpath: "assets/maps/basementtest.json", tileset: 0},
-    {levelpath: "assets/maps/hublevel.json", tileset: 1}
+    {levelpath: "assets/maps/hublevel.json", tileset: 1},
+    {levelpath: "assets/maps/springtest.json", tileset: 1}
 ];
 
 tilesets = [

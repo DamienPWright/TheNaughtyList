@@ -22,7 +22,7 @@ TitleScreen.prototype.preload = function(){
     game.load.spritesheet('en_bunny', 'assets/img/sprites/ene_bunny.png', 32, 32);
     
     game.load.spritesheet('hazards', 'assets/img/sprites/hazards.png', 32, 32);
-    
+    game.load.spritesheet('levelobjects', 'assets/img/sprites/levelobjects.png', 32, 32);
     game.load.spritesheet('platformA', 'assets/img/sprites/platformA.png', 96, 32);
     
     game.load.spritesheet('blood', 'assets/img/sprites/blood.png', 4, 4);
@@ -52,6 +52,9 @@ TitleScreen.prototype.create = function(){
     game.add.text(this.selPosX, this.selPosY + this.selPosYmod * 2, 'Nothing', {font: '10px Arial', fill: '#FFF'});
     game.add.text(this.selPosX, this.selPosY + this.selPosYmod * 3, 'Nothing', {font: '10px Arial', fill: '#FFF'});
     
+    //allow capture of right click
+    game.canvas.oncontextmenu = function (e) { e.preventDefault(); }
+    
     this.selector.y = (this.selPosY + (this.selPosYmod * this.selectorPos)) + this.selector.height - 6;
     this.selector.x = this.selPosX - (this.selector.width * 2);
      //cursors
@@ -70,6 +73,8 @@ TitleScreen.prototype.update = function() {
                 game.state.start('tmxlevel');
                 break;
             case 2:
+                current_level = 2;
+                game.state.start('tmxlevel');
                 break;
             case 3:
                 break;

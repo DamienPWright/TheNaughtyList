@@ -22,6 +22,8 @@
         <script type="text/javascript" src="js/game/enemies/Enemy.js"></script>
         <script type="text/javascript" src="js/game/enemies/EnBunny.js"></script>
         
+        <script type="text/javascript" src="js/game/effects/Effect.js"></script>
+        
         <script type="text/javascript" src="js/game/Inventory.js"></script>
         <script type="text/javascript" src="js/game/items/Item.js"></script>
         <script type="text/javascript" src="js/game/items/ItemHealthPickup.js"></script>
@@ -30,12 +32,18 @@
         <script type="text/javascript" src="js/game/items/ItemReindeerDust.js"></script>
         <script type="text/javascript" src="js/game/items/ItemJetPack.js"></script>
         <script type="text/javascript" src="js/game/items/ItemBearClaws.js"></script>
+        
         <script type="text/javascript" src="js/game/items/Weapon.js"></script>
+        <script type="text/javascript" src="js/game/Attacks/Attack.js"></script>
+        <script type="text/javascript" src="js/game/Attacks/SwordAttack.js"></script>
+        <script type="text/javascript" src="js/game/Attacks/SwordSpecial.js"></script>
         
         <script type="text/javascript" src="js/game/hazards/Hazard.js"></script>
         <script type="text/javascript" src="js/game/hazards/Spikes.js"></script>
         
         <script type="text/javascript" src="js/game/platforms/MovingPlatform.js"></script>
+        
+        <script type="text/javascript" src="js/game/misc/Spring.js"></script>
         
         <script type="text/javascript" src="js/game/fsm.js"></script>
         <script type="text/javascript" src="js/game/ActorState.js"></script>
@@ -66,6 +74,7 @@
             //game.state.add('gameover', GameOver);
             //game.state.add('levelclear', LevelClear);
             game.state.start('title', TitleScreen);
+            
         }
 
         function init(){

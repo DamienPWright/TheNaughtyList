@@ -71,6 +71,23 @@ Actor.prototype.updateActor = function(){
            this.spring_velocity_on = false;
        }
    }
+
+   if(this.spring_lock){
+       //this.body.allowGravity = false;
+       //this.body.checkCollision.up = false;
+       //this.body.checkCollision.down = false;
+       //this.body.checkCollision.left = false;
+       //this.body.checkCollision.right = false;
+       this.spring_lock_timer -= game.time.physicsElapsedMS;
+       if(this.spring_lock_timer <= 0){
+           this.spring_lock = false;
+           //this.body.checkCollision.up = true;
+           //this.body.checkCollision.down = true;
+           //this.body.checkCollision.left = true;
+           //this.body.checkCollision.right = true;
+           //this.body.allowGravity = true;
+       }
+   }
    
    if(this.knocked_back || this.spring_velocity_on){
        this.weaken_soft_velocity_limiter = true;
@@ -78,7 +95,7 @@ Actor.prototype.updateActor = function(){
        this.weaken_soft_velocity_limiter = false;
    }
    
-   if(this.knocked_back){
+   if(this.knocked_back || this.spring_lock){
        this.movement_input_locked = true;
    }else{
        this.movement_input_locked = false;
@@ -246,19 +263,32 @@ Actor.prototype.knockback = function(XSPD, YSPD, dur){
 }
 
 Actor.prototype.spring = function(XSPD, YSPD){
+
+    
+    
     var cxvel = this.body.velocity.x;
     var cyvel = this.body.velocity.y;
+
+    this.body.velocity.x = 0;
+    this.body.velocity.y = 0;
     
     this.body.velocity.x = XSPD;
     this.body.velocity.y = YSPD;
-    
-    if(!XSPD || XSPD === 0){
+
+    this.body.acceleration.x = XSPD;
+    this.body.acceleration.y = YSPD;
+    /*
+    if(XSPD != undefined || XSPD === 0){
         this.body.velocity.x = cxvel;  
     }
-    if(!YSPD || YSPD === 0){
+    if(YSPD != undefined || YSPD === 0){
         this.body.velocity.y = cyvel;
     }
+    */
+    console.log(this.body.velocity.x  + " " + this.body.velocity.y)
     var timer = (Math.abs(XSPD) > Math.abs(YSPD)) ? Math.abs(XSPD) : Math.abs(YSPD); 
     this.spring_velocity_timer = timer * 0.8;
     this.spring_velocity_on = true;
+    this.spring_lock = true;
+    this.spring_lock_timer = 50;
 }
