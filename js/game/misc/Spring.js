@@ -12,7 +12,7 @@ Spring.prototype = Object.create(Phaser.Sprite.prototype);
 Spring.prototype.constructor = Spring;
 
 Spring.prototype.onOverlap = function(actor){
-    actor.y -= 5;
+    
     
     actor.body.acceleration.x = 0;
     actor.body.acceleration.y = 0;
@@ -23,24 +23,34 @@ Spring.prototype.onOverlap = function(actor){
             break;
         case 0.5:
             actor.spring(0, this.strength);
+            actor.y += 5;
             break;
         case 1:
             actor.spring(-this.strength, 0);
             break;
         case 1.5:
             actor.spring(0, -this.strength);
+            actor.y -= 5;
             break;
         case 0.25:
             actor.spring(this.strength, this.strength);
+            actor.x = this.x + (this.width/2);
+            actor.y = this.y + (this.height/2);
             break;
         case 0.75:
             actor.spring(-this.strength, this.strength);
+            actor.x = this.x - (this.width/2);
+            actor.y = this.y + (this.height/2);
             break;
         case 1.25:
             actor.spring(-this.strength, -this.strength);
+            actor.x = this.x - (this.width/2);
+            actor.y = this.y - (this.height/2);
             break;
         case 1.75:
             actor.spring(this.strength, -this.strength);
+            actor.x = this.x + (this.width/2);
+            actor.y = this.y - (this.height/2);
             break;
             //actor.body.velocity.x = Math.cos(this.dir * Math.PI) * this.strength;
             //actor.body.velocity.y = Math.sin(this.dir * Math.PI) * this.strength;

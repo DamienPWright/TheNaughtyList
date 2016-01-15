@@ -34,6 +34,7 @@ Enemy.prototype.update = function(){
     this.fsm.update();
     this.updateAnimation();
     this.updateDetectors();
+    this.updateAnimation();
 };
 
 Enemy.prototype.checkAttackBox = function (target){

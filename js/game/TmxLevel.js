@@ -21,6 +21,7 @@ TmxLevel.prototype.create = function(){
    this.platforms = game.add.group();
    this.npcs = game.add.group();
    this.levelobjects = game.add.group();
+   this.effects = game.add.group();
    
    this.hitboxes_seek = game.add.group();
    this.hitboxes_friendly = game.add.group();
@@ -123,6 +124,18 @@ TmxLevel.prototype.createEnemiesFromMap = function(en){
     switch(en.properties.type){
         case "bunny":
             newenemy = new EnBunny(en.x, en.y - 32);
+            break;
+        case "polarbear":
+            newenemy = new EnPolarBear(en.x, en.y - 128);
+            break;
+        case "eyebird":
+            newenemy = new EnEyeBird(en.x, en.y - 128);
+            break;
+        case "hornfluff":
+            newenemy = new EnHornFluff(en.x, en.y - 96);
+            break;
+        case "yeti":
+            newenemy = new EnYeti(en.x, en.y - 32);
             break;
     }
     
@@ -259,22 +272,22 @@ TmxLevel.prototype.createBullet = function(X, Y, type, friendly, dir){
  * Use this to create effects rather than using external code
  */
 
-TmxLevel.prototype.createEffect = function(X, Y, type, friendly, dir){
+TmxLevel.prototype.createEffect = function(X, Y, type, xscale){
     var neweffect;
     switch(type){
-        case "spiderweb":
-            neweffect = new EffSpiderWeb(X, Y);
+        case "eff_swordspecial01":
+            neweffect = new EffSwordSpecial01(X, Y, xscale);
             break;
     }
-    //if(newbullet){
+    if(neweffect){
         this.effects.add(neweffect);
-    //}
+    }
 };
 
 TmxLevel.prototype.createHitBox = function(X, Y, W, H, friendly, lifespan, seek, origin){
     var spr = new HitBox(game, X, Y, W, H, 'blanksprite', friendly, lifespan, origin);
     //spr.body.setSize(W, H, 0, 0);
-    spr.renderable = true;
+    //spr.renderable = false;
     //spr.visible = false;
     if(seek){
         this.hitboxes_seek.add(spr);

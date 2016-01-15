@@ -39,6 +39,8 @@ function Attack(weapon, actor){
     ];
     
     this.weapon.animations.add('atk', [0, 1, 2], 20, false);
+    
+    this.attackdamageMod = 1;
 }
 
 Attack.prototype.onAttack = function(){
@@ -86,8 +88,16 @@ Attack.prototype.update = function(){
             if(this.weapon.animations.currentAnim._frameIndex == this.effectFrames[this.effectFrameIndex].f){
                 //create hitbox
                 var eff = this.effects[this.effectFrames[this.effectFrameIndex].ef];
+                var xpos = eff.X;
+                var effW = eff.W;
+                var xscale = 1;
+                //console.log(hbx);
+                if(this.actor.dir === 1){
+                    xpos = -(xpos) - effW;
+                    xscale = -1;
+                }
                 //console.log(eff);
-                //game.states.getCurrentState().createHitBox(hbx);
+                game.state.getCurrentState().createEffect(this.actor.x + eff.x, this.actor.y + eff.y, eff.type, xscale);
                 this.effectFrameIndex++;
             }
         }
@@ -103,5 +113,6 @@ Attack.prototype.update = function(){
 }
 
 Attack.prototype.onHitActor = function(actor){
-       actor.takeDamage(3, true);
+       actor.takeDamage(Math.ceil(this.weapon.baseWeaponAttack * this.attackdamageMod), true);
+       console.log(Math.ceil(this.weapon.baseWeaponAttack * this.attackdamageMod))
 };

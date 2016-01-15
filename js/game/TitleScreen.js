@@ -20,6 +20,10 @@ TitleScreen.prototype.preload = function(){
     game.load.spritesheet('NPCs', 'assets/img/sprites/NPC.png', 32, 64);
     
     game.load.spritesheet('en_bunny', 'assets/img/sprites/ene_bunny.png', 32, 32);
+    game.load.spritesheet('en_eyebird', 'assets/img/sprites/ene_eyebird.png', 128, 64);
+    game.load.spritesheet('en_hornfluff', 'assets/img/sprites/ene_hornfluff.png', 96, 64);
+    game.load.spritesheet('en_polarbear', 'assets/img/sprites/ene_polarbear.png', 64, 64);
+    game.load.spritesheet('en_yeti', 'assets/img/sprites/ene_yeti.png', 32, 32);
     
     game.load.spritesheet('hazards', 'assets/img/sprites/hazards.png', 32, 32);
     game.load.spritesheet('levelobjects', 'assets/img/sprites/levelobjects.png', 32, 32);
@@ -32,6 +36,8 @@ TitleScreen.prototype.preload = function(){
     game.load.image('dialogue_box', 'assets/img/ui/textbox.png')
     
     game.load.spritesheet('wood_sword', 'assets/img/sprites/woodsword_swipe.png', 64, 64);
+    
+    game.load.spritesheet('eff_swordspecial01', 'assets/img/sprites/eff_swordspecial_01.png', 128, 128);
     
     game.load.json('dialogues', 'js/game/data/Dialogues.json');
 }
@@ -65,7 +71,7 @@ TitleScreen.prototype.update = function() {
     if(this.enterKey.isDown){
         switch(this.selectorPos){
             case 0:
-                current_level = 0;
+                current_level = 3;
                 game.state.start('tmxlevel');
                 break;
             case 1:

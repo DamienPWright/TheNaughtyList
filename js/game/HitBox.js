@@ -3,6 +3,7 @@ function HitBox(game, X, Y, W, H, key, friendly, lifespan, origin){
     //this.x = X;
     //this.y = Y;
     this.origin = undefined;
+    this.renderable = false // set to true to view
     game.physics.arcade.enable(this);
     this.body.allowGravity = false;
     this.width = W;

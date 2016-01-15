@@ -313,6 +313,62 @@
                  "width":0,
                  "x":224,
                  "y":608
+                }, 
+                {
+                 "gid":211,
+                 "height":0,
+                 "name":"enemy",
+                 "properties":
+                    {
+                     "type":"eyebird"
+                    },
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":96,
+                 "y":384
+                }, 
+                {
+                 "gid":211,
+                 "height":0,
+                 "name":"enemy",
+                 "properties":
+                    {
+                     "type":"hornfluff"
+                    },
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":224,
+                 "y":800
+                }, 
+                {
+                 "gid":211,
+                 "height":0,
+                 "name":"enemy",
+                 "properties":
+                    {
+                     "type":"yeti"
+                    },
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":608,
+                 "y":384
+                }, 
+                {
+                 "gid":211,
+                 "height":0,
+                 "name":"enemy",
+                 "properties":
+                    {
+                     "type":"polarbear"
+                    },
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":832,
+                 "y":672
                 }],
          "opacity":1,
          "type":"objectgroup",
