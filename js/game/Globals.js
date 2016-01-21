@@ -12,12 +12,22 @@ levels = [
     {levelpath: "assets/maps/basementtest.json", tileset: 0},
     {levelpath: "assets/maps/hublevel.json", tileset: 1},
     {levelpath: "assets/maps/springtest.json", tileset: 1},
-    {levelpath: "assets/maps/enemytest01.json", tileset: 0}
+    {levelpath: "assets/maps/enemytest01.json", tileset: 0},
+    {levelpath: "assets/maps/factorytest.json", tileset: 2},
+    {levelpath: "assets/maps/jungletest.json", tileset: 3},
+    {levelpath: "assets/maps/tundratest.json", tileset: 6},
+    {levelpath: "assets/maps/minetest.json", tileset: 4},
+    {levelpath: "assets/maps/spaceshiptest.json", tileset: 5},
 ];
 
 tilesets = [
     "assets/img/tilesets/basement.png",
-    "assets/img/tilesets/hubtiles.png"
+    "assets/img/tilesets/hubtiles.png",
+    "assets/img/tilesets/factorytiles.png",
+    "assets/img/tilesets/foresttiles.png",
+    "assets/img/tilesets/minetiles.png",
+    "assets/img/tilesets/shiptiles.png",
+    "assets/img/tilesets/tundratiles.png"
 ];
 
 function getVelocityforTrajectory(ox, oy, tx, ty, a, g){

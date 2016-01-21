@@ -40,12 +40,14 @@ TitleScreen.prototype.preload = function(){
     game.load.spritesheet('eff_swordspecial01', 'assets/img/sprites/eff_swordspecial_01.png', 128, 128);
     
     game.load.json('dialogues', 'js/game/data/Dialogues.json');
+    game.load.json('bullets', 'js/game/data/Bullets.json');
 }
 
 TitleScreen.prototype.create = function(){
      init();
     scoreText = game.add.text(16, 16, '', {fontSize: '32px', fill: '#FFF'});
     dialogues = game.cache.getJSON('dialogues');
+    bulletData = game.cache.getJSON('bullets');
     
     this.selector = game.add.sprite(0,0,'title_select');
     this.selector.canMove = true;

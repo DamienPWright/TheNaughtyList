@@ -14,21 +14,7 @@ TmxLevel.prototype.create = function(){
    game.physics.arcade.gravity.y = 750; 
    game.stage.backgroundColor = "#000000";
    
-   this.hazards = game.add.group();
-   this.blood = game.add.group();
-   this.enemies = game.add.group();
-   this.items = game.add.group();
-   this.platforms = game.add.group();
-   this.npcs = game.add.group();
-   this.levelobjects = game.add.group();
-   this.effects = game.add.group();
-   
-   this.hitboxes_seek = game.add.group();
-   this.hitboxes_friendly = game.add.group();
-   this.hitboxes_unfriendly = game.add.group();
-
-   playerchar = new Player(0,0);
-   player = game.add.existing(playerchar)
+  
    
    
    //hazards = this.hazards;
@@ -38,8 +24,31 @@ TmxLevel.prototype.create = function(){
        this.map.addTilesetImage( this.map.tilesets[0].name, 'tileset');
        
        //layers
-       //this.bkg_layer = this.map.createLayer('bkg');
+       this.bkg_layer = this.map.createLayer('bkg');
        this.wall_layer = this.map.createLayer('wall');
+       
+       //objects
+        this.hazards = game.add.group();
+        this.blood = game.add.group();
+        this.enemies = game.add.group();
+        this.items = game.add.group();
+        this.platforms = game.add.group();
+        this.npcs = game.add.group();
+        this.levelobjects = game.add.group();
+        this.bullets = game.add.group();
+        this.effects = game.add.group();
+
+        for(var i = 0; i < 5; i++){
+            var newbullet = this.bullets.add(new Bullet(0, 0, "blanktexture"));
+            newbullet.kill();
+        }
+
+        this.hitboxes_seek = game.add.group();
+        this.hitboxes_friendly = game.add.group();
+        this.hitboxes_unfriendly = game.add.group();
+
+        playerchar = new Player(0,0);
+        player = game.add.existing(playerchar)
        
        //tile collisions
        this.map.setCollisionByExclusion([-1], true, this.wall_layer);
@@ -266,6 +275,56 @@ TmxLevel.prototype.createBullet = function(X, Y, type, friendly, dir){
     if(newbullet){
         this.bullets.add(newbullet);
     }
+};
+
+TmxLevel.prototype.bulletFactory = function(X, Y, friendly, dir, key){
+    if((X == undefined) || (Y == undefined) || (friendly == undefined) || (dir == undefined) || (key == undefined)){
+        console.log("Not all args were provided for the bullet!")
+        return;
+    }
+    var newBullet = bulletData[key]; //JSON data 
+    var recBullet = this.bullets.getFirstDead(); 
+    
+    if(newBullet == undefined){
+        console.log("Invalid bullet key provided: " + key);
+    }
+    if(recBullet == null){
+        //create a new bullet.
+    }else{
+        recBullet.reset();
+    }
+    
+    recBullet.x = X;
+    recBullet.y = Y;
+    recBullet.friendly = friendly;
+    recBullet.dir_angle = (dir) * Math.PI;
+    recBullet.loadTexture(newBullet.texture, 0, false);
+    recBullet.spriteRotates = newBullet.spriteRotates;
+    recBullet.anchor.setTo(Number(newBullet.anchor.x), Number(newBullet.anchor.y));
+    recBullet.impactEffect = newBullet.impactEffect;
+    recBullet.impactHitBox = newBullet.impactHitBox;
+    recBullet.lifespan = Number(newBullet.lifespan);
+    recBullet.speed = Number(newBullet.speed);
+    recBullet.setMotion(newBullet.motion);
+    recBullet.body.allowGravity = Boolean(newBullet.affectedByGravity);
+    recBullet.collideWithTiles = Boolean(newBullet.collideWithTiles);
+    recBullet.collideWithActor = Boolean(newBullet.collideWithActor);
+    recBullet.impactTiles = Boolean(newBullet.impactTiles);
+    recBullet.impactWallOnly = Boolean(newBullet.impactWallOnly);
+    recBullet.impactFloorOnly = Boolean(newBullet.impactFloorOnly);
+    recBullet.impactActor = Boolean(newBullet.impactActor);
+    recBullet.impactLimit = Number(newBullet.impactLimit);
+    recBullet.penetrateActor = Boolean(newBullet.penetrateActor);
+    recBullet.penetrateActorDepth = Number(newBullet.penetrateActorDepth);
+    recBullet.body.bounce.setTo(Number(newBullet.bounceFactor),Number(newBullet.bounceFactor));
+    
+    recBullet.lifespan = Number(newBullet.lifespan);
+    recBullet.deadOnImpactTiles = Boolean(newBullet.deadOnImpactTiles);
+    
+    recBullet.revive();
+    // .. and so on. 
+    recBullet.moveStrategy();
+    testbullet = recBullet;
 };
 
 /**

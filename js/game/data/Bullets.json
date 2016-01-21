@@ -1,0 +1,60 @@
+{
+    "testbullet":{
+        "texture": "tba",
+        "spriteRotates": false,
+        "anchor": [0.5, 0.5],
+        "impactEffect": ["texturename", 32, 32, -16, -16],
+        "impactHitBox": [ 32, 32, -16, -16],
+        "lifespan": 0,
+        "speed": 800,
+        "motion": "linear",
+        "affectedByGravity": false,
+        "collideWithTiles": true,
+        "collideWithActor": true,
+        "impactTiles": true,
+        "impactWallOnly": false,
+        "impactFloorOnly": false,
+        "impactActor": true,
+        "impactLimit": 1,
+        "penetrateActor": false,
+        "penetrateActorDepth": 0,
+        "bounceFactor": 0,
+        "effectsArray": [
+            {"t:" : 0, "eff:" :  ["texturename", 32, 32, -16, -16]}
+        ],
+        "effectsArrayLoop": false,
+        "hitboxArray": [
+            {"t:" : 0, "hbx:" :  [ 32, 32, -16, -16]}
+        ],
+        "hitboxArrayLoop": false
+    },
+    "testbullet2":{
+        "texture": "tba",
+        "spriteRotates": false,
+        "anchor": [0.5, 0.5],
+        "impactEffect": ["texturename", 32, 32, -16, -16],
+        "impactHitBox": [ 32, 32, -16, -16],
+        "lifespan": 0,
+        "speed": 800,
+        "motion": "linear",
+        "affectedByGravity": true,
+        "collideWithTiles": true,
+        "collideWithActor": true,
+        "impactTiles": false,
+        "impactWallOnly": false,
+        "impactFloorOnly": false,
+        "impactActor": false,
+        "impactLimit": 1,
+        "penetrateActor": false,
+        "penetrateActorDepth": 0,
+        "bounceFactor": 0.8,
+        "effectsArray": [
+            {"t:" : 0, "eff:" :  ["texturename", 32, 32, -16, -16]}
+        ],
+        "effectsArrayLoop": false,
+        "hitboxArray": [
+            {"t:" : 0, "hbx:" :  [ 32, 32, -16, -16]}
+        ],
+        "hitboxArrayLoop": false
+    }
+}
