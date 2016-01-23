@@ -292,3 +292,20 @@ Actor.prototype.spring = function(XSPD, YSPD){
     this.spring_lock = true;
     this.spring_lock_timer = 50;
 }
+
+/**
+ * Attempts to find the Y position of the closest solid wall tile. 
+ * @param {type} target - must be an object with an x and y coordinate.
+ * @returns {Number} - the worldY of the first tile found or -1 if none were found.
+ */
+
+Actor.prototype.getFloorYFromTarget = function(target){
+    var line = new Phaser.Line()
+    line.start.set(target.x, target.y);
+    line.end.set(target.x + 1, target.y + 1000);
+    var tiles = game.state.getCurrentState().wall_layer.getRayCastTiles(line, 4, true, false);
+    if(tiles.length > 0){
+        return tiles[0].worldY;
+    }
+    return -1;
+}

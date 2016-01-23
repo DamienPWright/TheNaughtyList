@@ -49,10 +49,10 @@ function EnEyeBird(X, Y){
     this.attackBoxSize = {w: this.attackBoxWidth , h: this.attackBoxLength};
     this.seekBox = game.state.getCurrentState().createHitBox(this.x, this.y, this.seekBoxSize.w, this.seekBoxSize.h, false, 0, true);
     
-    this.animations.add("idle_right", [0], 10, true);
-    this.animations.add("idle_left", [15], 10, true);
-    this.animations.add("walk_right", [1,2,0], 6, true);
-    this.animations.add("walk_left", [14,13,15], 6, true);
+    this.animations.add("idle_right", [4], 10, true);
+    this.animations.add("hover", [0, 0, 3, 1, 1, 2], 12, true);
+    this.animations.add("fly", [0, 0, 3, 1, 1, 2], 18, true);
+    this.animations.add("charge", [2,6], 18, true);
     
     //this.attackBox = game.state.getCurrentState().createHitBox(this.x, this.y, this.attackBoxSize.w, this.attackBoxSize.h, false, 0, true);
 

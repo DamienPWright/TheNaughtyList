@@ -411,7 +411,7 @@ Player.prototype.attack = function(evt){
 Player.prototype.onDeath = function(){
     game.state.getCurrentState().bloodExplosion(this.x + (this.width / 2), this.y + (this.height/2));
     game.state.start('gameover');
-    this.destroy();
+    this.kill();
 }
 
 Player.prototype.onMouseDown = function(evt){

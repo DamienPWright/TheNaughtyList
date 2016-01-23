@@ -36,3 +36,5 @@ function getVelocityforTrajectory(ox, oy, tx, ty, a, g){
     var v = (Math.sqrt(g) * Math.sqrt(Math.abs(rx)) * Math.sqrt((Math.tan(a)*Math.tan(a)) + 1)) / Math.sqrt(Math.abs((2 * Math.tan(a)) - (2 * g * ry) / rx));
     return v;
 }
+
+
